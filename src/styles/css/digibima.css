@@ -1,0 +1,97 @@
+
+
+*{
+    margin: 0;
+    padding: 0%;
+    box-sizing: border-box;
+    
+
+}
+body{
+  background-color:#C3ECFE;
+   /* background: linear-gradient(to bottom, #C2EBFF, #D3FFF8); */
+}
+.bgcolor{
+  background: linear-gradient(to bottom, #C2EBFF, #D3FFF8);
+}
+.thmbtn {
+  border-radius: 9999px;           
+  font-size: 0.875rem;             
+  font-weight: 600;                
+  color: #ffffff;                   
+  transition: all 0.2s ease-in-out; 
+  /* background: linear-gradient(to bottom, #426D98, #28A7E4); */
+  background: #7998F4;
+}
+
+.thmbtn:hover {
+  transform: scale(1.05);       
+}
+.greentext{
+  color: #9AFFDC;
+}
+
+.labelcls {
+  display: block;
+  color: #2F4A7E;
+  font-size: 0.875rem;
+  font-weight: 600;  
+  margin-bottom: 0.25rem; 
+}
+.inputcls {
+  width: 100%;
+  border-radius: 9999px; /* full rounded */
+  border: 1px solid #e2e8f0; /* slate-200 */
+  background-color: #fff;
+  padding: 0.75rem 1rem; /* py-3 px-4 */
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05); /* shadow-sm */
+  outline: none;
+  font-size: 0.875rem;
+  line-height: 1.25rem;  
+}
+/* globals.css */
+.link-underline {
+  @apply relative inline-block hover:text-green-600;
+}
+
+.link-underline::after {
+  content: "";
+  @apply absolute left-0 -bottom-0.5 h-0.5 bg-green-600 w-0 transition-all duration-300;
+}
+
+/* Hover/Focus par show */
+.link-underline:hover::after,
+.link-underline:focus-visible::after {
+  @apply w-full;
+}
+
+/* Active page ya open submenu par underline locked rahe */
+.link-underline.is-active::after,
+.link-underline[aria-current="page"]::after {
+  @apply w-full;
+}
+
+/* Agar parent menu item submenu control karta hai */
+.menu-item[aria-expanded="true"] > .link-underline::after {
+  @apply w-full;
+}
+
+
+/* ck editior css */
+/* ck editior css */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

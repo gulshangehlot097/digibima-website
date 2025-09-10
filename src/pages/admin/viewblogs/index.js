@@ -1,0 +1,280 @@
+"use client";
+import { useEffect, useState, useCallback } from "react";
+import { FiEdit, FiTrash2, FiPlusCircle } from "react-icons/fi";
+import { AiOutlineRead } from "react-icons/ai";
+import { CallApi } from "@/api";
+import constant from "@/env";
+import { showSuccess, showError } from "@/layouts/toaster";
+import { useRouter } from "next/router";
+import Pagination from "../../components/blogpage/pagination";
+import Modal from "@/pages/components/modal";
+
+const PER_PAGE = 5;
+
+export default function BlogTable() {
+  const router = useRouter();
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+
+  function normalizeBlog(b = {}) {
+    return {
+      id: b.id || b._id || b.blog_id || "",
+      title: b.title || b.name || "—",
+      category:
+        (b.category && (b.category.name || b.category)) ||
+        b.category_name ||
+        b.category ||
+        "—",
+      author:
+        (b.author && (b.author.name || b.author)) ||
+        b.author_name ||
+        b.author ||
+        "—",
+      date: b.published_at || b.created_at || b.updated_at || b.date || "—",
+      status:
+        b.status === 1 ||
+        b.status === "1" ||
+        b.status === "published" ||
+        b.is_published
+          ? "Published"
+          : "Draft",
+    };
+  }
+
+  const fetchBlogs = useCallback(async (targetPage = 1) => {
+    try {
+      setLoading(true);
+
+      let url = constant.API.BLOG;
+      url += (url.includes("?") ? "&" : "?") + `page=${targetPage}&per_page=${PER_PAGE}`;
+
+      const res = await CallApi(url, "GET");
+      // console.log(res)
+      if (!res?.status) {
+        setBlogs([]);
+        setPage(1);
+        setTotalPages(1);
+        return;
+      }
+
+      const pg = res.data || {};
+      const rows = Array.isArray(pg.data) ? pg.data : [];
+      setBlogs(rows.map(normalizeBlog));
+
+      const current =
+        Number(pg.current_page) ||
+        Number(pg?.meta?.current_page) ||
+        Number(targetPage) ||
+        1;
+
+      const last =
+        Number(pg.last_page) ||
+        Number(pg?.meta?.last_page) ||
+        (pg.next_page_url != null ? current + 1 : current);
+
+      setPage(current);
+      setTotalPages(last);
+    } catch (err) {
+      console.error("Error fetching blogs:", err);
+      setBlogs([]);
+      setPage(1);
+      setTotalPages(1);
+    } finally {
+      setLoading(false);
+    }
+  }, []); 
+
+  async function handleDelete(id) {
+    if (!id) return;
+    try {
+      const res = await CallApi(constant.API.DELETEBLOG, "POST", { id });
+      console.log(res);
+
+      if (res?.status) {
+        showSuccess(res?.message || "Blog deleted successfully ");
+
+        setBlogs((prev) => {
+          const next = prev.filter((b) => b.id !== id);
+          const nextPage = next.length === 0 && page > 1 ? page - 1 : page;
+          setTimeout(() => fetchBlogs(nextPage), 0);
+          return next;
+        });
+      } else {
+        showError(res?.message || "Failed to delete blog ");
+      }
+    } catch (err) {
+      console.error("Error deleting blog:", err);
+      showError("Something went wrong while deleting ");
+    }
+  }
+
+  useEffect(() => {
+    fetchBlogs(page);
+  }, [page, fetchBlogs]);
+
+  function formatDate(dateStr) {
+    if (!dateStr) return "—";
+    try {
+      const d = new Date(dateStr);
+      return (
+        d.toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        }) +
+        " " +
+        d.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })
+      );
+    } catch {
+      return dateStr;
+    }
+  }
+const SKELETON_COUNT = 5;
+  return (
+    <>
+      <div className="p-6 pt-32 md:pt-40 max-w-7xl mx-auto mb-10">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-3xl font-bold text-gray-800 flex items-center gap-2">
+            <AiOutlineRead className="w-8 h-8 text-indigo-600" /> View All Blogs
+          </h1>
+
+          <button
+            onClick={() => router.push("/admin/uploadblog")}
+            className="flex items-center gap-2 px-4 py-2 thmbtn"
+          >
+            <FiPlusCircle className="w-5 h-5" /> Add New Blog
+          </button>
+        </div>
+
+        <div className="overflow-x-auto bg-white rounded-2xl shadow-lg">
+          <table className="min-w-full text-sm text-left text-gray-600">
+            <thead className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white">
+              <tr>
+                <th className="px-6 py-4 font-semibold">ID</th>
+                <th className="px-6 py-4 font-semibold">Title</th>
+                <th className="px-6 py-4 font-semibold">Category</th>
+                <th className="px-6 py-4 font-semibold">Author</th>
+                <th className="px-6 py-4 font-semibold">Date</th>
+                <th className="px-6 py-4 font-semibold">Status</th>
+                <th className="px-6 py-4 text-center font-semibold">Actions</th>
+              </tr>
+            </thead>
+           <tbody>
+  {loading ? (
+    Array.from({ length: SKELETON_COUNT }).map((_, i) => (
+      <tr key={`sk-${i}`} className="animate-pulse border-b">
+        <td className="px-6 py-4">
+          <div className="h-4 w-6 rounded bg-gray-200" />
+        </td>
+        <td className="px-6 py-4">
+          <div className="h-4 w-72 rounded bg-gray-200" />
+        </td>
+        <td className="px-6 py-4">
+          <div className="h-4 w-32 rounded bg-gray-200" />
+        </td>
+        <td className="px-6 py-4">
+          <div className="h-4 w-28 rounded bg-gray-200" />
+        </td>
+        <td className="px-6 py-4">
+          <div className="h-4 w-40 rounded bg-gray-200" />
+        </td>
+        <td className="px-6 py-4">
+          <div className="h-6 w-24 rounded-full bg-gray-200" />
+        </td>
+        <td className="px-6 py-4">
+          <div className="flex items-center justify-center gap-3">
+            <div className="h-8 w-16 rounded bg-gray-200" />
+            <div className="h-8 w-16 rounded bg-gray-200" />
+          </div>
+        </td>
+      </tr>
+    ))
+  ) : blogs.length === 0 ? (
+    <tr>
+      <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
+        No blogs found
+      </td>
+    </tr>
+  ) : (
+    blogs.map((blog) => (
+      <tr
+        key={blog.id || blog.title}
+        className="border-b hover:bg-gray-50 transition duration-200"
+      >
+        <td className="px-6 py-4">{blog.id}</td>
+        <td className="px-6 py-4 font-medium text-gray-900">{blog.title}</td>
+        <td className="px-6 py-4">{blog.category}</td>
+        <td className="px-6 py-4">{blog.author}</td>
+        <td className="px-6 py-4">{formatDate(blog.date)}</td>
+        <td className="px-6 py-4">
+          <span
+            className={
+              "px-3 py-1 text-xs font-medium rounded-full " +
+              (blog.status === "Published"
+                ? "bg-green-100 text-green-700"
+                : "bg-yellow-100 text-yellow-700")
+            }
+          >
+            {blog.status}
+          </span>
+        </td>
+        <td className="px-6 py-4 flex items-center justify-center gap-3">
+          <button
+            onClick={() => router.push(`/admin/uploadblog?id=${blog.id}`)}
+            className="flex items-center gap-1 px-3 py-1 text-xs font-medium rounded-md bg-[#7998F4] text-white hover:bg-blue-600 transition"
+          >
+            <FiEdit className="w-4 h-4" /> Edit
+          </button>
+          <button
+            onClick={() => {
+              setDeleteId(blog.id);
+              setIsModalOpen(true);
+            }}
+            className="flex items-center gap-1 px-3 py-1 text-xs font-medium rounded-md bg-red-500 text-white hover:bg-red-600 transition"
+          >
+            <FiTrash2 className="w-4 h-4" /> Delete
+          </button>
+        </td>
+      </tr>
+    ))
+  )}
+</tbody>
+
+          </table>
+        </div>
+
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          onChange={(p) => {
+            const n = Math.max(1, Math.min(Number(p) || 1, totalPages));
+            if (n !== page) setPage(n);
+          }}
+        />
+      </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Confirm Delete"
+        width="max-w-md"
+        confirmText="Delete"
+        cancelText="Cancel"
+        onConfirm={() => {
+          if (deleteId) {
+            handleDelete(deleteId);
+          }
+          setIsModalOpen(false);
+        }}
+      >
+        <p className="text-gray-700">
+          Are you sure you want to delete this blog? This action cannot be undone.
+        </p>
+      </Modal>
+    </>
+  );
+}
