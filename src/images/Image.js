@@ -21,8 +21,8 @@ import bikeOne from "../../public/images/homepage/bike.png";
 import logoTwo from "../../public/images/dashboard/logo.png";
 
 import healthImg from "../../public/images/dashboard/service/health.jpeg";
-import twowheelerImg from "../../public/images/dashboard/service/two wheeler.jpeg";
-import fourwheelerImg from "../../public/images/dashboard/service/four wheeler.jpeg";
+import twowheelerImg from "../../public/images/dashboard/service/two-wheeler.jpeg";
+import fourwheelerImg from "../../public/images/dashboard/service/four-wheeler.jpeg";
 import commercialImg from "../../public/images/dashboard/service/commercial.jpeg";
 import travelImg from "../../public/images/dashboard/service/travel.jpeg";
 // loginpage

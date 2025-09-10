@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 **/node_modules
+**/backup
 
 # testing
 /coverage
