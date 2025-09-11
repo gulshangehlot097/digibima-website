@@ -13,19 +13,20 @@ import OurPartner from './home/insurancepartner'
 
 export default function Main() {
   return (
-   <>
-   <Seo
+      <>
+      <Seo
         title="DigiBima - Compare & Buy Insurance Online"
         description="Buy Health, Term Life, Motor and Travel Insurance at best prices. Instant quotes, simple process."
       />
-   <main className="">
-    <HeroSection/>
-    <ContactWithUs/>
-    <AboutUs/>
-    <WhyChooseUs/>
-    <DigibimaCta/>
-    <FaqSection/>
-    <OurPartner/>
-</main></>
+       <main>
+      <HeroSection/>
+      <ContactWithUs/>
+      <AboutUs/>
+      <WhyChooseUs/>
+      <DigibimaCta/>
+      <FaqSection/>
+      <OurPartner/>
+    </main>
+     </>
   );
 }
