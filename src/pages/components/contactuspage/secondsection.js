@@ -151,7 +151,7 @@ function SecondSection() {
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: i * 0.2, ease: "easeOut" }}
-              viewport={{ once: true }} // animate only once
+              viewport={{ once: true }} 
               className="h-full"
             >
               <Card spotlight={card.spotlight} className="flex h-full flex-col">

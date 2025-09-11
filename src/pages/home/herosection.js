@@ -1,43 +1,29 @@
+"use client";
+
 import React, { isValidElement, cloneElement } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { heroImg } from "@/images/Image";
 
 export default function InsuranceCategoriesSection({
   items = defaultItems,
   onCardClick,
-  bgImage = "/images/homepage/herosectionimg.jpg",
+  bgImage = heroImg,
   title = "Your Digital Insurance Partner",
   subtitle = "Get The Best Insurance Plan",
 }) {
   const CardInner = (card) => (
     <>
-      {/* {card.badge && (
-        <motion.span
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.4 }}
-          className={`absolute -top-2 left-1/2 -translate-x-1/2 inline-flex items-center justify-center gap-1
-                      rounded-full px-3 py-1 text-[10px] sm:text-[11px] font-semibold tracking-wide shadow-md
-                      ${badgeTheme(card.badgeTheme)}`}
-        >
-          {renderNodeOrImage(card.badgeIcon, "h-3 w-3 sm:h-3.5 sm:w-3.5")}
-          <span className="">{card.badge}</span>
-        </motion.span>
-      )} */}
-
       <motion.div
         whileHover={{ rotate: [0, -3, 3, 0], transition: { duration: 0.4 } }}
-        className="
-          mx-auto rounded-2xl 
-          flex items-center justify-center overflow-hidden
-          h-16 w-16 sm:h-20 sm:w-20
-        "
+        className="mx-auto rounded-2xl flex items-center justify-center overflow-hidden h-16 w-16 sm:h-20 sm:w-20"
       >
         {renderNodeOrImage(
           card.icon,
-          "h-full w-full object-contain drop-shadow-sm select-none"
-        ) ?? <span className="text-3xl sm:text-4xl">🛡️</span>}
+          "h-full w-full object-contain drop-shadow-sm select-none",
+          80
+        )}
       </motion.div>
 
       <div className="mt-2 sm:mt-3 text-center">
@@ -46,23 +32,26 @@ export default function InsuranceCategoriesSection({
         </div>
       </div>
 
-      {/* Hover effect border glow */}
       <div className="pointer-events-none absolute inset-0 rounded-2xl group-hover:ring-2 group-hover:ring-blue-400/60 group-hover:shadow-[0_10px_25px_rgba(30,64,175,0.25)] transition-all" />
     </>
   );
 
   return (
     <section className="relative w-full overflow-hidden pt-28 sm:pt-32 md:pt-48">
-         <Image
+      <Image
         src={bgImage}
         alt="Hero Background"
         fill
-        priority
-        quality={85}
-        sizes="100vw"
-        className="object-cover -z-20"
+        priority                     
+        placeholder="blur"
+        sizes="100vw"                 
+        quality={70}
+        decoding="async"             
+        className="object-cover -z-10"
       />
-      <div className="absolute inset-0 -z-10 inset-0 bg-[#D9F3FF]/40" />
+
+      {/* overlays */}
+      <div className="absolute inset-0 -z-10 bg-[#D9F3FF]/40" />
       <div className="pointer-events-none absolute -inset-x-20 -top-24 -bottom-24 -z-10 bg-[radial-gradient(circle_at_top,rgba(37,99,235,0.15),transparent_70%)] animate-pulse-slow" />
 
       <div className="mx-auto w-full max-w-[120rem] px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-12">
@@ -91,7 +80,7 @@ export default function InsuranceCategoriesSection({
           }}
           className="mt-6 sm:mt-8 md:mt-12"
         >
-        <div
+          <div
             className="
               grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6
               gap-3 sm:gap-4 md:gap-6
@@ -123,10 +112,9 @@ export default function InsuranceCategoriesSection({
                   {card.link ? (
                     <Link
                       href={card.link}
-                       target="_blank"
+                      target="_blank"
                       onClick={handleCardClick}
                       aria-label={card.title}
-                      prefetch
                     >
                       {CardInner(card)}
                     </Link>
@@ -150,21 +138,25 @@ export default function InsuranceCategoriesSection({
   );
 }
 
-function renderNodeOrImage(nodeOrType, className) {
+function renderNodeOrImage(nodeOrType, className, size = 80) {
   if (!nodeOrType) return null;
+
   if (typeof nodeOrType === "string") {
     return (
       <Image
         src={nodeOrType}
         alt=""
-        width={80}   
-        height={80} 
+        width={size}
+        height={size}
+        sizes={`${size}px`}
         className={className}
-        loading="lazy"
+        loading="lazy"      
+        decoding="async"
         draggable={false}
       />
     );
   }
+
   if (isValidElement(nodeOrType)) {
     return cloneElement(nodeOrType, {
       className: [nodeOrType.props?.className, className]
@@ -175,6 +167,7 @@ function renderNodeOrImage(nodeOrType, className) {
       "aria-hidden": true,
     });
   }
+
   const Comp = nodeOrType;
   try {
     return (
@@ -190,47 +183,11 @@ function renderNodeOrImage(nodeOrType, className) {
   }
 }
 
-
-
-
 const defaultItems = [
-  {
-    title: "Health",
-    badge: "POPULAR",
-    badgeTheme: "pink",
-    icon: "/images/homepage/health.png",
-    badgeIcon: "/icons/star.png",
-    link: "https://insurance.digibima.com/login?type=motor",
-     width:400
-  },
-  {
-    title: "Term Life",
-    icon: "/images/homepage/health.png",
-    link: "https://insurance.digibima.com/login?type=motor",
-    width:400
-  },
-  {
-    title: "2 Wheeler",
-    badge: "SPECIAL OFFERS",
-    badgeTheme: "yellow",
-    icon: "/images/homepage/bike.png",
-    link: "https://insurance.digibima.com",
-  },
-  {
-    title: "4 Wheeler",
-    icon: "/images/homepage/car.png",
-    link: "https://insurance.digibima.com/login?type=motor",
-  },
-  {
-    title: "Travel",
-    badge: "SAVINGS",
-    badgeTheme: "green",
-    icon: "/images/homepage/commercial.png",
-    link: "https://insurance.digibima.com/login?type=motor",
-  },
-  {
-    title: "Others",
-    icon: "/images/health/health-two.png",
-    link: "https://insurance.digibima.com/login?type=motor",
-  },
+  { title: "Health", icon: "/images/homepage/health.png", link: "https://insurance.digibima.com/login?type=motor" },
+  { title: "Term Life", icon: "/images/homepage/health.png", link: "https://insurance.digibima.com/login?type=motor" },
+  { title: "2 Wheeler", icon: "/images/homepage/bike.png", link: "https://insurance.digibima.com" },
+  { title: "4 Wheeler", icon: "/images/homepage/car.png", link: "https://insurance.digibima.com/login?type=motor" },
+  { title: "Travel", icon: "/images/homepage/commercial.png", link: "https://insurance.digibima.com/login?type=motor" },
+  { title: "Others", icon: "/images/health/health-two.png", link: "https://insurance.digibima.com/login?type=motor" },
 ];

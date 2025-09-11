@@ -3,6 +3,7 @@
 import logo from "../../public/images/logo.png";
 import logoicon from "../../public/images/logoicon.png";
 import ErrorPageImg from "../../public/images/404.png";
+import heroImg from "../../public/images/homepage/herosectionimg.jpg";
 import homecar from "../../public/images/homepage/car.png";
 import homebike from "../../public/images/homepage/bike.png";
 import homehealth from "../../public/images/homepage/health.png";
@@ -33,7 +34,7 @@ import cardthree from "../../public/images/loginpage/cardthreeimg.jpg";
 
 
 export {
-    adminlogin,logo,ErrorPageImg,
+    adminlogin,logo,ErrorPageImg,heroImg,
     healthOne,
 healthTwo,homecar,homebike,homehealth,homecommercial,
 carTwo,bikeOne,

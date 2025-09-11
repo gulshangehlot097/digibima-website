@@ -8,6 +8,7 @@ import UniversalDatePicker from "@/pages/datepicker/index";
 import { showError } from "@/layouts/toaster";
 import { Send } from "lucide-react";
 import { isAlpha, isNumber } from "@/styles/js/validation";
+import Link from "next/link";
 
 function ContactSection({ onSubmit, resetTrigger }) {
   const {
@@ -221,13 +222,12 @@ function ContactSection({ onSubmit, resetTrigger }) {
                   />
                   <span className="text-slate-700">
                     I agree to the{" "}
-                    <a href="#" className="text-sky-700 underline">
-                      Terms
-                    </a>{" "}
-                    and{" "}
-                    <a href="#" className="text-sky-700 underline">
-                      Conditions
-                    </a>
+                    <Link
+                      href="/about/termandcondition"
+                      className="text-sky-700 underline whitespace-nowrap"
+                    >
+                      Terms and Conditions
+                    </Link>
                     .
                   </span>
                 </label>

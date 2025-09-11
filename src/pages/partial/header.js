@@ -174,22 +174,21 @@ export default function Header() {
       >
         <div className="max-w-screen-2xl mx-auto px-3 sm:px-6 py-3 flex justify-between items-center relative z-[61]">
           {/* Logo */}
-          <Link
-            href="/"
-            className="text-2xl font-bold whitespace-nowrap shrink-0 relative z-[62] backdrop-blur-none"
-          >
-            {/* If `logo` is a static import (recommended), width/height are inferred.
-                sizes helps responsive behavior for LCP */}
-            <Image
-              src={logo}
-              alt="Digibima Logo"
-              className="h-[40px] w-auto sm:h-[50px]"
-              priority
-              placeholder="empty"
-              quality={100}
-              sizes="(max-width: 640px) 120px, 160px"
-            />
-          </Link>
+<Link
+  href="/"
+  className="text-2xl font-bold whitespace-nowrap shrink-0 relative z-[62] backdrop-blur-none"
+>
+  <Image
+    src={logo}
+    alt="Digibima Logo"
+    width={160} 
+    height={50}
+    priority
+    quality={75} 
+    sizes="160px" 
+    className="h-[40px] w-auto sm:h-[50px]"
+  />
+</Link>
 
           {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center gap-3 lg:gap-6 font-medium text-gray-700">
@@ -618,11 +617,12 @@ export default function Header() {
             </Link>
 
             <Link
-              href="/login"
-              className="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors"
-            >
-              Log In
-            </Link>
+  href="/login"
+  className="px-4 py-2 bg-green-700 text-white rounded-full hover:bg-green-800 transition-colors"
+>
+  Log In
+</Link>
+
           </nav>
         </div>
       </header>

@@ -1,9 +1,6 @@
 // pages/_app.js
 import "@/styles/globals.css";
 import "@/styles/css/digibima.css";
-import Header from "./partial/header";
-import Footer from "./partial/footer";
-import FooterTwo from "./partial/footertwo";
 import { Toaster } from "react-hot-toast";
 import { useState, useEffect } from "react";
 import { Poppins } from "next/font/google";
@@ -11,6 +8,7 @@ import PageLoader from "@/layouts/loader";
 import { useRouter } from "next/router";
 import { PrimeReactProvider } from "primereact/api";
 import { UserContext } from "@/context/UserContext";
+import Layout from "@/layouts/layout";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -24,9 +22,7 @@ export default function App({ Component, pageProps }) {
   const [pageLoading, setPageLoading] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1000);
+    const timer = setTimeout(() => setLoading(false), 1000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -49,23 +45,18 @@ export default function App({ Component, pageProps }) {
     return <PageLoader />;
   }
 
-  // 👇 NEW: hide layout ONLY on exact "/admin"
-  // (handles trailing slash and ignores query string)
+  // 👇 check admin
   const pathNoQuery = router.asPath.split("?")[0].replace(/\/+$/, "") || "/";
   const isAdminRoot = pathNoQuery === "/admin";
 
   return (
     <div className={poppins.className}>
-      {/* Header/Footer hidden only on /admin, visible elsewhere */}
-      {!isAdminRoot && <Header />}
-
       <PrimeReactProvider>
         <Toaster />
-        <Component {...pageProps} />
+        <Layout isAdminRoot={isAdminRoot}>
+          <Component {...pageProps} />
+        </Layout>
       </PrimeReactProvider>
-
-      {/* <Footer /> */}
-      {!isAdminRoot && <FooterTwo />}
     </div>
   );
 }

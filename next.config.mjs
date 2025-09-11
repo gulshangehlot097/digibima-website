@@ -1,20 +1,23 @@
+// next.config.mjs
+import bundleAnalyzer from '@next/bundle-analyzer';
+
 /** @type {import('next').NextConfig} */
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+});
+
 const nextConfig = {
   reactStrictMode: false,
   productionBrowserSourceMaps: false,
 
-  // 👇 add this
   images: {
-    // Either use domains:
     domains: ["stage.digibima.com", "digibima.com", "cdn.digibima.com"],
-    // Or (more precise) remotePatterns:
     remotePatterns: [
       {
         protocol: "https",
         hostname: "stage.digibima.com",
         pathname: "/**",
       },
-      // add more hosts if needed
     ],
   },
 
@@ -28,4 +31,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);

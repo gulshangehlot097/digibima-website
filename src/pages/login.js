@@ -32,13 +32,12 @@ function CustomerLogin() {
   useEffect(() => generateCaptcha(), [generateCaptcha]);
 
  const isCaptchaValid = useMemo(() => {
-   // exact, case-sensitive match; unicode safety ke liye normalize
    return captchaInput.trim().normalize('NFKC') === captcha.normalize('NFKC');
  }, [captcha, captchaInput]);
   const isMobileValid = useMemo(() => /^[6-9]\d{9}$/.test(mobile), [mobile]);
 
   // --- Send OTP ---
-  const resendTimerRef = useRef(null); // cleanup ke liye
+  const resendTimerRef = useRef(null); 
   const handleSendOtp = useCallback(async () => {
     if (!isMobileValid) return;
     setSending(true);
@@ -312,7 +311,6 @@ function CustomerLogin() {
                         alt={s.alt}
                         fill
                         sizes="(min-width: 768px) 50vw, 100vw"
-                        // first slide ko priority (better LCP), baaki auto-lazy
                         priority={i === 0}
                         className="object-contain"
                         draggable={false}

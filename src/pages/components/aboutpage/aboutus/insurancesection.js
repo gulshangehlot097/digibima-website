@@ -12,7 +12,7 @@ const CARDS = [
     href: '/insurance/life',
   },
   {
-    title: 'Medical Insurance',
+    title: 'Health Insurance',
     image: '/images/about/insuresectionimg2.jpg',
     colorBar: 'bg-[#CF5DCD]',
     href: '/insurance/medical',

@@ -1,9 +1,12 @@
 "use client";
 import { FiPhoneCall } from "react-icons/fi";
-import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import Lottie from "lottie-react";
 import PhoneIcon from "@/animation/Call.json";
+import Image from "next/image";
+import { motion } from "framer-motion";
+
+const MotionImage = motion(Image);
 
 export default function AboutSection() {
   const router = useRouter();
@@ -20,13 +23,16 @@ export default function AboutSection() {
           className="relative w-full lg:w-1/2 flex justify-center"
         >
           <div className="w-full h-auto relative max-w-md sm:max-w-lg lg:max-w-none">
-            <motion.img
+           <MotionImage
               src="/images/homepage/aboutimg.png"
               alt="About DigiBima"
+              width={800}       
+              height={600}
               className="w-full h-full object-cover"
               initial={{ scale: 0.9 }}
               whileInView={{ scale: 1 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
+              priority        
             />
             {/* Floating shapes */}
             <motion.div

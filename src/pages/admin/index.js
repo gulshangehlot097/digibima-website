@@ -205,7 +205,7 @@ const AdminLogin = () => {
             <p className="absolute bottom-6 w-full text-center text-sm px-6">
               Please enter your registered mobile number
               <br />
-              to access the admin dashboard
+              to access the view/upload Blogs
             </p>
           </div>
         </div>
