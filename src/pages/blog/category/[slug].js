@@ -1,5 +1,5 @@
 "use client";
-
+import Seo from "@/pages/components/seo";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
@@ -157,6 +157,12 @@ export default function CategoryPage() {
   };
 
   return (
+   <>
+     <Seo
+      title={`${category} Blogs | DigiBima`}
+      description={`Read the latest blogs, articles and insights about ${category} on DigiBima. Stay updated with tips, guides, and news.`}
+      keywords={`${category}, insurance blogs, DigiBima`}
+    />
     <main className="relative w-full overflow-hidden pt-28 sm:pt-32 md:pt-28">
       {loading ? (
         <div className="animate-pulse grid grid-cols-1 md:grid-cols-3 gap-6 mx-4 sm:mx-8 md:mx-20 my-10">
@@ -227,5 +233,6 @@ export default function CategoryPage() {
         </>
       )}
     </main>
+   </>
   );
 }

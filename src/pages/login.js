@@ -1,4 +1,5 @@
 "use client";
+import Seo from "@/pages/components/seo";
 import { useEffect, useMemo, useRef, useState, useCallback, memo } from "react";
 import Image from "next/image";
 import { cardone, cardtwo, cardthree } from "@/images/Image";
@@ -159,6 +160,11 @@ function CustomerLogin() {
   const goTo = useCallback((i) => setActive(wrap(i)), [wrap]);
 
   return (
+    <>
+          <Seo
+        title="Customer Login – Digibima Insurance Portal"
+        description="Access your Digibima insurance account securely. Login to view policy details, manage your health, life, or general insurance plans, and track claims with ease."
+      />
     <section className="w-full pt-36">
       <div className="mx-auto max-w-6xl px-4 py-10">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
@@ -358,6 +364,7 @@ function CustomerLogin() {
         </div>
       </div>
     </section>
+    </>
   );
 }
 

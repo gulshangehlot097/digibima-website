@@ -16,6 +16,7 @@ import {
   FaLinkedinIn,
   FaInstagram,
 } from "react-icons/fa";
+import { FaShield,FaFileLines } from "react-icons/fa6";
 
 export default function Footer() {
   const [showDisclaimer, setShowDisclaimer] = useState(false);
@@ -57,7 +58,10 @@ export default function Footer() {
                     href: "https://instagram.com/digibima?igshid=YmMyMTA2M2Y=",
                     icon: <FaInstagram />,
                   },
-                  { href: "https://twitter.com/Digi_Bima", icon: <FaTwitter /> },
+                  {
+                    href: "https://twitter.com/Digi_Bima",
+                    icon: <FaTwitter />,
+                  },
                   {
                     href: "https://in.linkedin.com/company/digibima/",
                     icon: <FaLinkedinIn />,
@@ -90,9 +94,14 @@ export default function Footer() {
                   href: "mailto:info@digibima.com",
                 },
                 {
+                  label: "Privacy Policy",
+                  icon: <FaShield />,
+                  href: "/about/privacypolicy",
+                },
+                {
                   label: "Terms and Conditions",
-                  icon: <FaCheckCircle />,
-                  href: "/terms",
+                  icon: <FaFileLines />,
+                  href: "/about/termandcondition",
                 },
               ]}
             />
@@ -102,22 +111,22 @@ export default function Footer() {
                 {
                   label: "Term Life Plan",
                   icon: <FaCheckCircle />,
-                  href: "/life/term-life",
+                  href: "/life-insurance/term-life",
                 },
                 {
                   label: "Savings/Investment Plan",
                   icon: <FaCheckCircle />,
-                  href: "/life/savings-plan",
+                  href: "/life-insurance/savings",
                 },
                 {
                   label: "Pension/Retirement Benefit Plan",
                   icon: <FaCheckCircle />,
-                  href: "/life/pension-plan",
+                  href: "/life-insurance/pension",
                 },
                 {
                   label: "Child Savings Plan",
                   icon: <FaCheckCircle />,
-                  href: "/life/child-savings",
+                  href: "/life-insurance/child",
                 },
               ]}
             />
@@ -127,109 +136,115 @@ export default function Footer() {
                 {
                   label: "Individual Health Insurance",
                   icon: <FaHeartbeat />,
-                  href: "/health/individual",
+                  href: "/health-insurance/individual",
                 },
                 {
                   label: "Family Health Insurance",
                   icon: <FaHeartbeat />,
-                  href: "/health/family",
+                  href: "/health-insurance/family",
                 },
                 {
                   label: "Senior Citizen Health Plan",
                   icon: <FaHeartbeat />,
-                  href: "/health/senior",
+                  href: "/health-insurance/senior-citizen",
                 },
                 {
                   label: "Maternity Insurance",
                   icon: <FaHeartbeat />,
-                  href: "/health/maternity",
+                  href: "/health-insurance/maternity",
                 },
               ]}
             />
+
             <FooterCol
               title="General Insurance"
               links={[
                 {
                   label: "2 Wheeler Insurance",
                   icon: <FaMotorcycle />,
-                  href: "/general/2wheeler",
+                  href: "/motor-insurance/two-wheeler",
                 },
                 {
                   label: "4 Wheeler Insurance",
                   icon: <FaCarSide />,
-                  href: "/general/4wheeler",
+                  href: "/motor-insurance/four-wheeler",
                 },
               ]}
             />
           </div>
 
           {/* Disclaimer Section */}
-{/* Disclaimer Section */}
-<div className="mt-12 border-t border-b border-white/20 pt-4 pb-4">
-  {/* Mobile Button */}
-  <div className="md:hidden text-center">
-    <button
-      onClick={() => setShowDisclaimer(!showDisclaimer)}
-      className="text-green-300 font-medium underline"
-    >
-      {showDisclaimer ? "Hide Disclaimer" : "Read Disclaimer"}
-    </button>
-  </div>
+          {/* Disclaimer Section */}
+          <div className="mt-12 border-t border-b border-white/20 pt-4 pb-4">
+            {/* Mobile Button */}
+            <div className="md:hidden text-center">
+              <button
+                onClick={() => setShowDisclaimer(!showDisclaimer)}
+                className="text-green-300 font-medium underline"
+              >
+                {showDisclaimer ? "Hide Disclaimer" : "Read Disclaimer"}
+              </button>
+            </div>
 
-  {/* Disclaimer in 3 Columns (Visible on md+, toggle on mobile) */}
-  <div
-    className={`grid grid-cols-1 md:grid-cols-3 gap-10 text-sm text-gray-200 leading-relaxed mt-8 ${
-      showDisclaimer ? "block" : "hidden md:grid"
-    }`}
-  >
-    {[
-      {
-        title: "Company",
-        content: (
-          <>
-            <strong className="text-white">
-              Digibima Insurance Web Aggregators Private Limited
-            </strong>{" "}
-            | CIN: U67110RJ2022PTC080500 | IRDAI License No.{" "}
-            <strong className="text-green-200">IRDAI/INT/WBA/76/2023</strong> <br />
-      Valid till: <strong className="text-green-200">09/08/2026</strong>
-          </>
-        ),
-      },
-      {
-        title: "Disclaimer",
-        content: (
-          <>
-            Insurance is the subject matter of solicitation. Information
-            available on this portal is of the partner insurer with whom we have
-            an agreement. The information displayed is solely based on the
-            information received from the respective insurer.
-          </>
-        ),
-      },
-      {
-        title: "Note",
-        content: (
-          <>
-            The information provided on this website/page is for information
-            purpose only. Digibima does not endorse the information so provided
-            and strives to provide factual and unbiased information to assist in
-            making informed insurance choices.
-          </>
-        ),
-      },
-    ].map((item, i) => (
-      <div key={i} className="space-y-2">
-        <h4 className="text-white-300 font-semibold text-lg relative pb-2 mb-3">
-          {item.title}
-          <span className="absolute left-0 bottom-0 w-12 h-0.5 bg-green-400 rounded"></span>
-        </h4>
-        <p className="text-gray-100 text-sm">{item.content}</p>
-      </div>
-    ))}
-  </div>
-</div>
-
+            {/* Disclaimer in 3 Columns (Visible on md+, toggle on mobile) */}
+            <div
+              className={`grid grid-cols-1 md:grid-cols-3 gap-10 text-sm text-gray-200 leading-relaxed mt-8 ${
+                showDisclaimer ? "block" : "hidden md:grid"
+              }`}
+            >
+              {[
+                {
+                  title: "Company",
+                  content: (
+                    <>
+                      <strong className="text-white">
+                        Digibima Insurance Web Aggregators Private Limited
+                      </strong>{" "}
+                      | CIN: U67110RJ2022PTC080500 | IRDAI License No.{" "}
+                      <strong className="text-green-200">
+                        IRDAI/INT/WBA/76/2023
+                      </strong>{" "}
+                      <br />
+                      Valid till:{" "}
+                      <strong className="text-green-200">09/08/2026</strong>
+                    </>
+                  ),
+                },
+                {
+                  title: "Disclaimer",
+                  content: (
+                    <>
+                      Insurance is the subject matter of solicitation.
+                      Information available on this portal is of the partner
+                      insurer with whom we have an agreement. The information
+                      displayed is solely based on the information received from
+                      the respective insurer.
+                    </>
+                  ),
+                },
+                {
+                  title: "Note",
+                  content: (
+                    <>
+                      The information provided on this website/page is for
+                      information purpose only. Digibima does not endorse the
+                      information so provided and strives to provide factual and
+                      unbiased information to assist in making informed
+                      insurance choices.
+                    </>
+                  ),
+                },
+              ].map((item, i) => (
+                <div key={i} className="space-y-2">
+                  <h4 className="text-white-300 font-semibold text-lg relative pb-2 mb-3">
+                    {item.title}
+                    <span className="absolute left-0 bottom-0 w-12 h-0.5 bg-green-400 rounded"></span>
+                  </h4>
+                  <p className="text-gray-100 text-sm">{item.content}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 

@@ -1,4 +1,5 @@
 "use client";
+import Seo from "@/pages/components/seo";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
@@ -143,6 +144,17 @@ export default function BlogDetail() {
   };
 
   return (
+  <>
+     <Seo
+      title={`${title} | DigiBima Blog`}
+      description={
+        post?.meta?.description ||
+        stripHtml(post?.content || "").slice(0, 150) ||
+        "Read this blog on DigiBima for insights, tips, and updates."
+      }
+      keywords={post?.meta?.keywords || post?.tags || ""}
+      image={hero}
+    />
     <main className="relative w-full overflow-hidden pt-32 sm:pt-28 md:pt-40 mb-16">
       <div className=" mx-auto max-w-4xl px-4">
         <div className="bg-white p-4 rounded-2xl mb-4">
@@ -322,5 +334,6 @@ export default function BlogDetail() {
         ) : null}
       </Head>
     </main>
+  </>
   );
 }

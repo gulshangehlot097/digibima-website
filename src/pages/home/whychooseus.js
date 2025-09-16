@@ -113,11 +113,11 @@ export default function WhyChooseUsSection() {
       <div className="relative z-10">
         {/* Heading */}
         <div className="text-center mb-6 sm:mb-8 md:mb-12">
-          <p className="text-xs sm:text-sm md:text-base lg:text-xl text-[#1D4ED8] font-semibold uppercase mb-1">
+          {/* <p className="text-xs sm:text-sm md:text-base lg:text-xl text-[#1D4ED8] font-semibold uppercase mb-1">
             Why Choose Us
-          </p>
+          </p> */}
           <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">
-            Reasons to Choose Counsolve
+            Reasons to Choose <span className="text-[#1D4ED8]">DigiBima</span>
           </h2>
         </div>
 

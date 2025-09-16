@@ -7,13 +7,13 @@ import { motion } from "framer-motion";
 
 export default function QuoteHero() {
   return (
-    <section className="relative overflow-hidden bgcolor pt-20">
+    <section className="relative overflow-hidden bg-white pt-20">
       <div className="pointer-events-none absolute inset-y-0 left-0 z-0 w-full ">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
-          className="absolute inset-0 bg-[#C3ECFE]"
+          className="absolute inset-0 bg-gradient-to-br from-sky-100 via-indigo-50 to-purple-100"
         />
         <motion.div
           animate={{
@@ -25,22 +25,22 @@ export default function QuoteHero() {
           }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
           className="absolute inset-0"
-          // style={{
-          //   backgroundImage:
-          //     "radial-gradient(600px 300px at 20% 30%, #C3ECFE, transparent 60%)",
-          // }}
+          style={{
+            backgroundImage:
+              "radial-gradient(600px 300px at 20% 30%, rgba(56,189,248,0.28), transparent 60%)",
+          }}
         />
-        {/* <div className="absolute -left-16 top-10 h-80 w-80 rounded-full bg-sky-300/35 blur-3xl" />
+        <div className="absolute -left-16 top-10 h-80 w-80 rounded-full bg-sky-300/35 blur-3xl" />
         <div className="absolute left-64 top-64 h-64 w-64 rounded-full bg-indigo-300/30 blur-3xl" />
-        <div className="absolute left-20 bottom-8 h-56 w-56 rounded-full bg-purple-300/25 blur-3xl" /> */}
-        {/* <div
+        <div className="absolute left-20 bottom-8 h-56 w-56 rounded-full bg-purple-300/25 blur-3xl" />
+        <div
           className="absolute inset-0 opacity-30"
           style={{
             backgroundImage:
               "linear-gradient(to right, rgba(15,31,59,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(15,31,59,0.06) 1px, transparent 1px)",
             backgroundSize: "28px 28px",
           }}
-        /> */}
+        />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-2 sm:px-6 lg:px-12 py-12 md:py-20">

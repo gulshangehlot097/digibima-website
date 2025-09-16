@@ -228,7 +228,7 @@ export default function TermsAndConditions() {
                 id="overview"
                 className="mb-8 rounded-2xl border border-slate-200/70 dark:border-slate-800/70 bg-white/75 dark:bg-slate-900/60 p-6 shadow-sm"
               >
-                <p className="text-slate-700 dark:text-slate-300">
+                <p className="text-slate-700 dark:text-slate-300 text-justify">
                   Welcome to{" "}
                   <strong>Digibima Insurance Web Aggregator Pvt Ltd</strong>{" "}
                   (“Digibima”, “we”, “us”, or “our”). By accessing or using our
@@ -247,7 +247,7 @@ export default function TermsAndConditions() {
                 <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 mb-3">
                   1. About Us
                 </h2>
-                <p className="text-slate-700 dark:text-slate-300">
+                <p className="text-slate-700 dark:text-slate-300 text-justify">
                   Digibima is a licensed Insurance Web Aggregator (IRDAI License
                   No.:{" "}
                   <span className="underline decoration-dotted underline-offset-4">
@@ -310,7 +310,7 @@ export default function TermsAndConditions() {
                 <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 mb-3">
                   4. Accuracy of Information
                 </h2>
-                <p className="text-slate-700 dark:text-slate-300">
+                <p className="text-slate-700 dark:text-slate-300 text-justify">
                   While we strive to ensure all information provided on our
                   platform is accurate, we do not guarantee the accuracy or
                   completeness of the data presented. Users are advised to
@@ -327,7 +327,7 @@ export default function TermsAndConditions() {
                 <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 mb-3">
                   5. Third-Party Services
                 </h2>
-                <p className="text-slate-700 dark:text-slate-300">
+                <p className="text-slate-700 dark:text-slate-300 text-justify">
                   Our Site contains links to third-party websites, including
                   insurance companies and partners. Digibima is not responsible
                   for the content, privacy practices, or terms of these
@@ -343,7 +343,7 @@ export default function TermsAndConditions() {
                 <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 mb-3">
                   6. Communication Consent
                 </h2>
-                <p className="text-slate-700 dark:text-slate-300">
+                <p className="text-slate-700 dark:text-slate-300 text-justify">
                   By using our services, you consent to receive transactional
                   and promotional communications from Digibima via SMS, voice
                   calls, email, WhatsApp and other electronic or telephonic
@@ -362,7 +362,7 @@ export default function TermsAndConditions() {
                 <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 mb-3">
                   7. Intellectual Property
                 </h2>
-                <p className="text-slate-700 dark:text-slate-300">
+                <p className="text-slate-700 dark:text-slate-300 text-justify">
                   All content on the Site, including text, graphics, logos, and
                   software, is the property of Digibima or its licensors and is
                   protected by applicable intellectual property laws. You may
@@ -398,7 +398,7 @@ export default function TermsAndConditions() {
                 <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 mb-3">
                   9. Indemnity
                 </h2>
-                <p className="text-slate-700 dark:text-slate-300">
+                <p className="text-slate-700 dark:text-slate-300 text-justify">
                   You agree to indemnify and hold harmless Digibima, its
                   directors, officers, employees and agents from and against all
                   liabilities, damages and expenses arising out of your use of
@@ -414,7 +414,7 @@ export default function TermsAndConditions() {
                 <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 mb-3">
                   10. Modifications
                 </h2>
-                <p className="text-slate-700 dark:text-slate-300">
+                <p className="text-slate-700 dark:text-slate-300 text-justify">
                   We reserve the right to modify these Terms at any time. Any
                   changes will be posted on this page with an updated effective
                   date. Continued use of our Site after such changes constitutes

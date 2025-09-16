@@ -6,7 +6,7 @@ import { Copy, Check } from "lucide-react";
 
 function SecondSection() {
   const address =
-    "706, Gali No.8, New Sanganer Rd, Devi Nagar, Jaipur, Rajasthan 302019";
+    "706, Lane No. 6, New Sanganer Road, Devi Nagar, Jaipur, Rajasthan 302019";
   const email = "info@digibima.com";
   const phone = "+91 911 91 73 733";
 

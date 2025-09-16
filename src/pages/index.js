@@ -7,6 +7,8 @@ import WhyChooseUs from './home/whychooseus'
 import DigibimaCta from './home/digibimacta'
 import FaqSection from './home/faqsection'
 import OurPartner from './home/insurancepartner'
+import PerfectPlanSection from './home/contact'
+import ConnectWith from '@/pages/components/home/connectwithus'
 
 
 
@@ -20,10 +22,12 @@ export default function Main() {
       />
        <main>
       <HeroSection/>
-      <ContactWithUs/>
+      <PerfectPlanSection/>
+      {/* <ContactWithUs/> */}
       <AboutUs/>
       <WhyChooseUs/>
-      <DigibimaCta/>
+      {/* <DigibimaCta/> */}
+      <ConnectWith/>
       <FaqSection/>
       <OurPartner/>
     </main>

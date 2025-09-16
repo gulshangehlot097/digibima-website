@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Seo from "@/pages/components/seo";
 import ContactSection from '@/pages/components/contactuspage/contactsection';
 import { CallApi } from "@/api";
 import constant from "@/env";
@@ -25,8 +26,13 @@ export default function ContactUs() {
   };
 
   return (
+   <>
+        <Seo
+        title="Digibima Insurance – Health, Life & General Insurance Contact"
+        description="Get in touch with Digibima for expert guidance on health, life, and general insurance plans. Contact us via phone, email, or online form for quick support and advice."
+      />
     <main className='relative w-full overflow-hidden pt-28 sm:pt-32 md:pt-28'>
       <ContactSection onSubmit={handleContactSubmit} resetTrigger={resetForm} />
-    </main>
+    </main></>
   );
 }

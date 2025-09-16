@@ -1,5 +1,5 @@
 "use client";
-
+import Seo from "@/pages/components/seo";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { CallApi } from "@/api";
 import constant from "@/env";
@@ -110,7 +110,12 @@ export default function Blogs() {
   };
 
   return (
-    <main className="relative w-full overflow-hidden pt-18 sm:pt-28 md:pt-32">
+ <>
+      <Seo
+        title="Blog | DigiBima – Insurance Tips, News & Guides"
+        description="Explore the DigiBima Blog for expert insurance tips, latest industry news, and helpful guides to make informed decisions about your health, life, and general insurance."
+      />
+    <main className="relative w-full overflow-hidden pt-36 sm:pt-28 md:pt-32">
       {loading ? (
         <div className="animate-pulse grid grid-cols-1 md:grid-cols-3 gap-6 mx-4 sm:mx-8 md:mx-20 my-10">
           <div className="rounded-lg h-64 w-full bg-white dark:bg-gray-700/40" />
@@ -134,5 +139,6 @@ export default function Blogs() {
         <p className="text-center py-10">No blogs found.</p>
       )}
     </main>
+ </>
   );
 }

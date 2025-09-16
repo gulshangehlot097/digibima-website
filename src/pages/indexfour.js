@@ -7,14 +7,17 @@ import { motion } from "framer-motion";
 
 export default function QuoteHero() {
   return (
-    <section className="relative overflow-hidden bgcolor pt-20">
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-0 w-full ">
+    <section className="relative overflow-hidden bg-white pt-20">
+      {/* LEFT-SIDE GRADIENT/LAYERS (VISIBLE) */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-0 w-full md:w-2/3">
+        {/* Base soft gradient */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
-          className="absolute inset-0 bg-[#C3ECFE]"
+          className="absolute inset-0 bg-gradient-to-br from-sky-100 via-indigo-50 to-purple-100"
         />
+        {/* Animated subtle shift */}
         <motion.div
           animate={{
             transform: [
@@ -25,56 +28,68 @@ export default function QuoteHero() {
           }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
           className="absolute inset-0"
-          // style={{
-          //   backgroundImage:
-          //     "radial-gradient(600px 300px at 20% 30%, #C3ECFE, transparent 60%)",
-          // }}
+          style={{
+            backgroundImage:
+              "radial-gradient(600px 300px at 20% 30%, rgba(56,189,248,0.28), transparent 60%)",
+          }}
         />
-        {/* <div className="absolute -left-16 top-10 h-80 w-80 rounded-full bg-sky-300/35 blur-3xl" />
+        {/* Highlight blobs */}
+        <div className="absolute -left-16 top-10 h-80 w-80 rounded-full bg-sky-300/35 blur-3xl" />
         <div className="absolute left-64 top-64 h-64 w-64 rounded-full bg-indigo-300/30 blur-3xl" />
-        <div className="absolute left-20 bottom-8 h-56 w-56 rounded-full bg-purple-300/25 blur-3xl" /> */}
-        {/* <div
+        <div className="absolute left-20 bottom-8 h-56 w-56 rounded-full bg-purple-300/25 blur-3xl" />
+        {/* Light grid */}
+        <div
           className="absolute inset-0 opacity-30"
           style={{
             backgroundImage:
               "linear-gradient(to right, rgba(15,31,59,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(15,31,59,0.06) 1px, transparent 1px)",
             backgroundSize: "28px 28px",
           }}
-        /> */}
+        />
       </div>
 
+      {/* RIGHT-SIDE BACKGROUND IMAGE */}
+      <div className="absolute inset-y-0 right-0 z-0 w-full md:w-1/3">
+        <Image
+          src="/one.jpg"
+          alt="Family at breakfast table"
+          fill
+          priority
+          sizes="(min-width: 768px) 50vw, 100vw"
+          className="object-cover"
+        />
+        {/* Dark overlay ONLY on small screens to keep text readable */}
+        <div className="absolute inset-0 md:hidden bg-black/40" />
+      </div>
+
+      {/* CONTENT */}
       <div className="relative z-10 mx-auto max-w-7xl px-2 sm:px-6 lg:px-12 py-12 md:py-20">
-        <div className="max-w-8xl">
+        <div className="max-w-5xl">
           <motion.h1
-            className="text-3xl sm:text-4xl md:text-5xl text-center font-extrabold leading-tight mb-4  text-[#0F1F3B]"
+            className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight mb-4 text-white md:text-[#0F1F3B]"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            Your Digital{" "}
-            <span className="text-[#0c4c8d]">Insurance Partner</span>
+            Your Digital <span className="text-white md:text-[#1D4ED8]">Insurance Partner</span>
           </motion.h1>
 
-          <span className="block text-center text-[#0F1F3B]">
-            <TypeAnimation
-              sequence={[
-                "Health Insurance",
-                2000,
-                "Life Insurance",
-                2000,
-                "Travel Insurance",
-                2000,
-                "Motor Insurance",
-                2000,
-              ]}
-              wrapper="span"
-              speed={50}
-              repeat={Infinity}
-              className="text-lg sm:text-xl md:text-2xl text-center font-semibold text-[inherit] mb-6 sm:mb-8 block"
-              style={{ color: "inherit" }}
-              cursorClassName="text-[inherit]"
-            />
-          </span>
+        <span className="block text-white md:text-[#0F1F3B]">
+  <TypeAnimation
+    sequence={[
+      "Health Insurance", 2000,
+      "Life Insurance", 2000,
+      "Travel Insurance", 2000,
+      "Motor Insurance", 2000,
+    ]}
+    wrapper="span"
+    speed={50}
+    repeat={Infinity}
+    className="text-lg sm:text-xl md:text-2xl font-semibold text-[inherit] mb-6 sm:mb-8 block"
+    style={{ color: "inherit" }}
+    cursorClassName="text-[inherit]"
+  />
+</span>
         </div>
 
         {/* Main card */}
@@ -133,9 +148,7 @@ export default function QuoteHero() {
             </ul>
 
             <div className="mt-6 flex flex-wrap gap-3">
-              <button className="btn-secondary">
-                Or, see all 30+ products
-              </button>
+              <button className="btn-secondary">Or, see all 30+ products</button>
               <button className="btn-ghost">Continue previous quote</button>
               <button className="btn-ghost">Find an agent</button>
             </div>
@@ -143,6 +156,7 @@ export default function QuoteHero() {
         </div>
       </div>
 
+      {/* Button styles */}
       <style jsx global>{`
         .btn-secondary {
           @apply inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50;
@@ -155,7 +169,15 @@ export default function QuoteHero() {
   );
 }
 
-function Tile({ label, sub, badge, imageSrc, highlight = false, link = "#" }) {
+/* ---- Tile (card) ---- */
+function Tile({
+  label,
+  sub,
+  badge,
+  imageSrc,
+  highlight = false,
+  link = "#",
+}) {
   const tone =
     badge?.tone === "sky"
       ? "bg-sky-100 text-sky-700"
@@ -173,6 +195,7 @@ function Tile({ label, sub, badge, imageSrc, highlight = false, link = "#" }) {
         highlight ? "ring-1 ring-sky-100" : "",
       ].join(" ")}
     >
+      {/* Whole card clickable */}
       <Link href={link} className="block focus:outline-none">
         {badge?.text && (
           <span
