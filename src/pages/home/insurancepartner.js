@@ -15,7 +15,7 @@ const partners = [
   { name: "HDFC", logo: "/images/ourpartners/hdfc.png" },
   { name: "Future", logo: "/images/ourpartners/future.png" },
   { name: "Bandhan Life", logo: "/images/ourpartners/bandhanlife.jpg" },
-  { name: "Zuno", logo: "/images/ourpartners/Zuno.jpg" },
+  { name: "Zuno", logo: "/images/ourpartners/zuno.jpg" },
   { name: "Bajaj", logo: "/images/ourpartners/bajaj.jpg" },
   // add more logos here…
 ];
