@@ -9,19 +9,19 @@ const CARDS = [
     title: 'Life Insurance',
     image: '/images/about/insuresectionimg1.jpg',
     colorBar: 'bg-[#3490CC]',
-    href: '/insurance/life',
+    href: 'https://insurance.digibima.com/',
   },
   {
     title: 'Health Insurance',
     image: '/images/about/insuresectionimg2.jpg',
     colorBar: 'bg-[#CF5DCD]',
-    href: '/insurance/medical',
+    href: 'https://insurance.digibima.com/',
   },
   {
     title: 'General Insurance',
     image: '/images/about/insuresectionimg3.jpg',
     colorBar: 'bg-[#88C948]',
-    href: '/insurance/general',
+    href: 'https://insurance.digibima.com/',
   },
 ];
 
@@ -93,7 +93,7 @@ export default function InsuranceSection() {
               );
 
               return card.href ? (
-                <Link key={card.title} href={card.href} className="block">
+                <Link key={card.title} href={card.href} target='_blank' className="block">
                   {CardInner}
                 </Link>
               ) : (

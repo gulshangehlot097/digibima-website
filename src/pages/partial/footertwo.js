@@ -188,7 +188,7 @@ export default function Footer() {
 
             {/* Disclaimer in 3 Columns (Visible on md+, toggle on mobile) */}
             <div
-              className={`grid grid-cols-1 md:grid-cols-3 gap-10 text-sm text-gray-200 leading-relaxed mt-8 ${
+              className={`grid grid-cols-1 md:grid-cols-3 gap-10 text-sm text-justify text-gray-200 leading-relaxed mt-8 ${
                 showDisclaimer ? "block" : "hidden md:grid"
               }`}
             >
@@ -197,17 +197,27 @@ export default function Footer() {
                   title: "Company",
                   content: (
                     <>
-                      <strong className="text-white">
-                        Digibima Insurance Web Aggregators Private Limited
-                      </strong>{" "}
-                      | CIN: U67110RJ2022PTC080500 | IRDAI License No.{" "}
-                      <strong className="text-green-200">
-                        IRDAI/INT/WBA/76/2023
-                      </strong>{" "}
-                      <br />
-                      Valid till:{" "}
-                      <strong className="text-green-200">09/08/2026</strong>
-                    </>
+                    <strong className="text-white">
+                      Digibima Insurance Web Aggregators Private Limited
+                    </strong>{" "}
+                    | CIN: U67110RJ2022PTC080500 <br />
+
+                    IRDAI License No.:{" "}
+                    <strong className="text-green-200">
+                      IRDAI/INT/WBA/76/2023
+                    </strong>{" "}
+                    <br />
+
+                    ISNP Licence No.:{" "}
+                    <strong className="text-green-200">
+                      ISNP-IRDAI/ISNP/WA/09/2025
+                    </strong>{" "}
+                    <br />
+
+                    Valid till:{" "}
+                    <strong className="text-green-200">09/08/2026</strong>
+                  </>
+
                   ),
                 },
                 {

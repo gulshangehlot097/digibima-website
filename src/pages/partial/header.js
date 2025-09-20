@@ -169,7 +169,7 @@ export default function Header() {
         className={`fixed left-0 right-0 transition-all duration-500 z-[60] ${
           isScrolled
             ? "mt-0 mx-0 lg:mx-20 w-full lg:w-[89%] bg-white/95 backdrop-blur shadow-md rounded-full px-4 sm:px-6 md:px-8"
-            : "mt-10 w-full   translate-y-0 opacity-100 "
+            : "mt-10 w-full bg-[#f0f8ff]   translate-y-0 opacity-100 "
         }`}
       >
         <div className="max-w-screen-2xl mx-auto px-3 sm:px-6 py-3 flex justify-between items-center relative z-[61]">

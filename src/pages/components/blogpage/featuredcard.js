@@ -75,7 +75,7 @@ export default function FeaturedCard({ post = {} }) {
         {/* Content */}
         <div className="p-6 sm:p-8 md:border-l md:border-slate-200 flex flex-col h-full">
           {(date || author || comments) && (
-            <p className="text-xs text-slate-500 mb-2">
+            <p className="text-xs  text-slate-500 mb-2">
               {date && <time dateTime={date}>{date}</time>}
               {author && <> &nbsp; | &nbsp; By {author}</>}
               {comments && <> &nbsp; | &nbsp; {comments}</>}
@@ -87,7 +87,7 @@ export default function FeaturedCard({ post = {} }) {
           </h2>
 
           {safeshortdes && (
-            <p className="mt-4 text-slate-700 leading-relaxed whitespace-pre-line">
+            <p className="mt-4 text-slate-700 text-justify  leading-relaxed whitespace-pre-line">
               {safeshortdes}
             </p>
           )}

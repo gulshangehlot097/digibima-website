@@ -55,7 +55,7 @@ export default function QuoteHero() {
             <span className="text-[#0c4c8d]">Insurance Partner</span>
           </motion.h1>
 
-          <span className="block text-center text-[#0F1F3B]">
+          <span className="block text-center text-[#089586]">
             <TypeAnimation
               sequence={[
                 "Health Insurance",
@@ -71,7 +71,7 @@ export default function QuoteHero() {
               speed={50}
               repeat={Infinity}
               className="text-lg sm:text-xl md:text-2xl text-center font-semibold text-[inherit] mb-6 sm:mb-8 block"
-              style={{ color: "inherit" }}
+             
               cursorClassName="text-[inherit]"
             />
           </span>
@@ -88,47 +88,47 @@ export default function QuoteHero() {
               <Tile
                 label="Health"
                 sub="Cashless hospitals, pre & post hospitalization"
-                badge={{ text: "POPULAR", tone: "sky" }}
+                // badge={{ text: "POPULAR", tone: "sky" }}
                 imageSrc="/images/homepage/health.png"
                 highlight
-                link="/health-insurance"
+               link="https://insurance.digibima.com/"
               />
 
               <Tile
                 label="Term Life"
                 sub="High cover, low premium, tax benefits*"
-                badge={{ text: "VALUE", tone: "emerald" }}
+                // badge={{ text: "VALUE", tone: "emerald" }}
                 imageSrc="/images/homepage/health.png"
-                link="/life-insurance"
+                link="https://insurance.digibima.com/"
               />
 
               <Tile
                 label="2 Wheeler"
                 sub="Instant renewal, zero paperwork"
-                badge={{ text: "RENEWALS", tone: "violet" }}
+                // badge={{ text: "RENEWALS", tone: "violet" }}
                 imageSrc="/images/homepage/bike.png"
-                link="/two-wheeler-insurance"
+                 link="https://insurance.digibima.com/"
               />
 
               <Tile
                 label="4 Wheeler"
                 sub="Comprehensive, third-party & add-ons"
                 imageSrc="/images/homepage/car.png"
-                link="/car-insurance"
+                link="https://insurance.digibima.com/"
               />
 
               <Tile
                 label="Travel"
                 sub="Medical cover, baggage, trip delays"
                 imageSrc="/images/homepage/commercial.png"
-                link="/travel-insurance"
+                 link="https://insurance.digibima.com/"
               />
 
               <Tile
                 label="Other"
                 sub="Home, personal accident & more"
                 imageSrc="/images/health/health-two.png"
-                link="/other-insurance"
+                link="https://insurance.digibima.com/"
               />
             </ul>
 
@@ -137,7 +137,7 @@ export default function QuoteHero() {
                 Or, see all 30+ products
               </button>
               <button className="btn-ghost">Continue previous quote</button>
-              <button className="btn-ghost">Find an agent</button>
+              {/* <button className="btn-ghost">Find an agent</button> */}
             </div>
           </div>
         </div>
@@ -173,11 +173,11 @@ function Tile({ label, sub, badge, imageSrc, highlight = false, link = "#" }) {
         highlight ? "ring-1 ring-sky-100" : "",
       ].join(" ")}
     >
-      <Link href={link} className="block focus:outline-none">
+      <Link href={link} target="_blank" className="block focus:outline-none ">
         {badge?.text && (
           <span
             className={[
-              "absolute right-3 top-3 rounded-full px-2 py-0.5 text-[10px] font-bold",
+              "absolute right-3 top-3 rounded-full px-2 py-0.5 text-[10px] text-justify font-bold",
               tone,
             ].join(" ")}
           >

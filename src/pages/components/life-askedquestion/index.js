@@ -18,7 +18,7 @@ export default function FaqSection({ faqs = [] }) {
     <section className="bg-[#C3ECFE] py-16 px-4">
       <div className="text-center mb-10 max-w-3xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-3">
-          Frequently Asked <span className="text-[#1D4ED8]">Questions</span>
+          Frequently Asked <span className="text-[#0c4c8d]">Questions</span>
         </h2>
         <p className="text-base md:text-lg text-gray-600">
           We are here to help you do your job so that we can help you get the
@@ -39,7 +39,7 @@ export default function FaqSection({ faqs = [] }) {
                   className="w-full px-6 py-4 flex justify-between items-center"
                 >
                   <div className="flex items-center gap-4 text-left">
-                    <div className="w-8 h-8 bg-[#7998F4] text-white font-bold text-sm flex items-center justify-center rounded-full shadow-md">
+                    <div className="w-8 h-8 bg-[#0c4c8d] text-white font-bold text-sm flex items-center justify-center rounded-full shadow-md">
                       {String(i + 1).padStart(2, "0")}
                     </div>
                     <p className="text-base text-gray-800 font-medium">
@@ -62,7 +62,7 @@ export default function FaqSection({ faqs = [] }) {
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.4, ease: "easeInOut" }}
-                    className="px-6 text-base text-gray-700 overflow-hidden"
+                    className="px-6 text-base text-gray-700  text-justify overflow-hidden"
                   >
                     <div className="pt-2 pb-4" style={{ whiteSpace: "pre-line" }}>{item.answer}</div>
                   </motion.div>

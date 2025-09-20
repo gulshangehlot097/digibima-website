@@ -274,7 +274,7 @@ export default function BlogDetail() {
 
         <motion.article
           {...fadeUp}
-          className="mt-6 rounded-[28px] bg-white shadow-sm ring-1 ring-black/5 p-5 sm:p-8"
+          className="mt-6 rounded-[28px] bg-white  text-justify shadow-sm ring-1 ring-black/5 p-5 sm:p-8"
         >
           <div
             className="prose prose-slate max-w-none prose-img:rounded-xl prose-headings:scroll-mt-28 prose-a:text-[#1F4C7A] hover:prose-a:text-sky-600 prose-h2:border-l-4 prose-h2:border-sky-400 prose-h2:pl-2"

@@ -26,7 +26,7 @@ export default function LifeIndex({ items }) {
           {items.map((it) => (
             <li key={it.slug} className="rounded-2xl border bg-white p-6 shadow hover:shadow-lg transition">
               <h2 className="text-lg font-semibold">{it.h1}</h2>
-              <p className="text-sm mt-1">{it.lead}</p>
+              <p className="text-sm mt-1 text-justify">{it.lead}</p>
               <Link
                 href={`/life-insurance/${it.slug}`}
                 className="mt-3 inline-block text-emerald-700"

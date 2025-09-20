@@ -32,7 +32,7 @@ export default function HealthIndex({ items }) {
                 className="rounded-2xl border bg-white p-6 shadow hover:shadow-lg transition"
               >
                 <h2 className="text-lg font-semibold text-gray-900">{it.h1}</h2>
-                <p className="text-sm text-gray-600 mt-2">{it.lead}</p>
+                <p className="text-sm mt-1 text-justify">{it.lead}</p>
                 <Link
                   href={`/health-insurance/${it.slug}`}
                   className="mt-4 inline-block text-emerald-700 font-medium hover:underline"

@@ -108,7 +108,7 @@ export default function LifeProductPage({ slug, data, lastUpdated }) {
               <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900">
                 {data.h1}
               </h1>
-              <p className="text-lg text-gray-600">{data.lead}</p>
+              <p className="text-lg text-gray-600  text-justify">{data.lead}</p>
 
               {/* Chips */}
               {Array.isArray(data.sections) &&
@@ -129,7 +129,7 @@ export default function LifeProductPage({ slug, data, lastUpdated }) {
               {/* CTA */}
               <div className="flex flex-wrap gap-4 pt-2">
                 <Link
-                  href="/quote"
+                  href="https://insurance.digibima.com/" target="_blank"
                   className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 text-white font-semibold shadow-lg hover:bg-emerald-700 transition-transform hover:scale-105"
                 >
                   Get Instant Quote <FaArrowRight />
@@ -191,7 +191,7 @@ export default function LifeProductPage({ slug, data, lastUpdated }) {
                       <Link
                         key={s.id}
                         href={`#${s.id}`}
-                        className="whitespace-nowrap rounded-full border px-4 py-1.5 text-sm text-gray-600 hover:bg-emerald-50 hover:text-emerald-700"
+                        className="whitespace-nowrap rounded-full border px-4 py-1.5 text-sm text-gray-600  hover:bg-emerald-50 hover:text-emerald-700"
                       >
                         {s.title}
                       </Link>
@@ -243,7 +243,7 @@ export default function LifeProductPage({ slug, data, lastUpdated }) {
 
                   {/* body */}
                   {s.type === "text" && (
-                    <p className="mt-5 max-w-3xl leading-relaxed text-gray-700">
+                    <p className="mt-5 max-w-3xl leading-relaxed  text-justify text-gray-700">
                       {s.text}
                     </p>
                   )}
@@ -261,7 +261,7 @@ export default function LifeProductPage({ slug, data, lastUpdated }) {
                               <span className="mt-1 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
                                 <FaCheck />
                               </span>
-                              <p className="text-gray-800">{item}</p>
+                              <p className="text-gray-800  text-justify">{item}</p>
                             </div>
                           </div>
                         ))}
@@ -287,7 +287,7 @@ export default function LifeProductPage({ slug, data, lastUpdated }) {
                   </div>
                   <div className="flex gap-4">
                     <Link
-                      href="/quote"
+                     href="https://insurance.digibima.com/" target="_blank"
                       className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-white font-semibold shadow hover:bg-emerald-700"
                     >
                       Get Quote <FaArrowRight />
@@ -340,7 +340,7 @@ export default function LifeProductPage({ slug, data, lastUpdated }) {
 
                 <div className="mt-6 grid gap-3">
                   <Link
-                    href="/quote"
+                   href="https://insurance.digibima.com/" target="_blank"
                     className="flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-white font-semibold shadow hover:bg-emerald-700"
                   >
                     Get Quote <FaArrowRight />
@@ -362,7 +362,7 @@ export default function LifeProductPage({ slug, data, lastUpdated }) {
       <div className="fixed inset-x-4 bottom-4 z-40 md:hidden pointer-events-none">
         <div className="flex gap-2 rounded-2xl border bg-white/95 p-2 shadow-lg backdrop-blur pointer-events-auto">
           <Link
-            href="/quote"
+            href="https://insurance.digibima.com/" target="_blank"
             className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-white"
           >
             Get Quote <FaArrowRight />

@@ -82,7 +82,7 @@ export default function BlogCard({ post = {} }) {
           </h3>
 
           {shortdes && (
-            <p className="mt-3 text-slate-700 leading-relaxed line-clamp-3">
+            <p className="mt-3 text-slate-700  text-justify leading-relaxed line-clamp-3">
               {shortdes}
             </p>
           )}

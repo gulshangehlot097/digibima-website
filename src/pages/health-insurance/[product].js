@@ -106,59 +106,69 @@ export default function HealthProductPage({ slug, data, lastUpdated }) {
           </nav>
 
           {/* HERO */}
-          <section className="relative grid gap-10 md:grid-cols-2 items-center rounded-3xl bg-white border shadow-xl overflow-hidden">
-            <div className="p-8 sm:p-12 space-y-6 min-w-0">
-              <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900">
+         <section className="relative grid gap-8 md:grid-cols-2 items-center rounded-2xl sm:rounded-3xl bg-white border overflow-hidden">
+            {/* Left */}
+            <div className="p-6 sm:p-10 space-y-6 min-w-0">
+              <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 leading-tight break-words">
                 {data.h1}
               </h1>
-              <p className="text-lg text-gray-600">{data.lead}</p>
+              <p className="text-base md:text-lg text-gray-600 text-justify break-words">{data.lead}</p>
 
-              {/* Chips */}
+              {/* Chips from first list section (if available) */}
               {Array.isArray(data.sections) &&
                 data.sections[0]?.type === "list" &&
                 data.sections[0].items?.length && (
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap gap-3 min-w-0">
                     {data.sections[0].items.slice(0, 3).map((b) => (
                       <span
                         key={b}
                         className="inline-flex items-center gap-2 rounded-full bg-white shadow px-4 py-1.5 text-sm font-medium text-emerald-700 border border-emerald-100"
                       >
-                        <FaCheck /> {b}
+                        <FaCheck className="shrink-0" /> {b}
                       </span>
                     ))}
                   </div>
                 )}
 
               {/* CTA */}
-              <div className="flex flex-wrap gap-4 pt-2">
+              <div className="flex flex-wrap gap-3 pt-2">
                 <Link
-                  href="/quote"
+                 href="https://insurance.digibima.com/" target="_blank"
                   className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 text-white font-semibold shadow-lg hover:bg-emerald-700 transition-transform hover:scale-105"
                 >
-                  Get Instant Quote <FaArrowRight />
+                  Get Instant Quote <FaArrowRight className="shrink-0" />
                 </Link>
                 <Link
                   href="/contact"
                   className="inline-flex items-center gap-2 rounded-xl border px-6 py-3 font-semibold text-gray-700 hover:bg-gray-50 hover:shadow transition-transform hover:scale-105"
                 >
-                  Talk to Advisor <FaQuestionCircle />
+                  Talk to Advisor <FaQuestionCircle className="shrink-0" />
                 </Link>
               </div>
 
-              <p className="pt-2 text-xs text-gray-500">
-                Last updated: {updatedHuman}
-              </p>
+              <p className="pt-1 text-xs text-gray-500">Last updated: {updatedHuman}</p>
             </div>
-            <div className="hidden md:block relative w-full h-full min-w-0">
-              <div className="absolute inset-0 bg-emerald-100 rounded-full blur-3xl opacity-30"></div>
-              <Image
-                src={data.heroImg || ""}
-                alt={data.heroAlt || "Error Image"}
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
+
+            {/* Right (stable height on small/medium, full on lg+) */}
+           {/* Right (hidden on mobile, visible from md+) */}
+<div className="relative w-full min-w-0 h-56 sm:h-72 md:h-[360px] lg:h-full hidden md:block" aria-hidden="true">
+  <div className="absolute inset-0 bg-emerald-100 rounded-full blur-3xl opacity-30 pointer-events-none" />
+  {data.heroImg ? (
+    <Image
+      src={data.heroImg}
+      alt={data.heroAlt || "Motor insurance"}
+      fill
+      sizes="(min-width:1280px) 50vw, (min-width:768px) 50vw"
+      className="object-cover"
+      priority
+    />
+  ) : (
+    <div className="absolute inset-0 grid place-items-center bg-emerald-50 text-emerald-700">
+      <span className="text-sm">Image coming soon</span>
+    </div>
+  )}
+</div>
+
           </section>
 
           {/* Stats */}
@@ -183,7 +193,7 @@ export default function HealthProductPage({ slug, data, lastUpdated }) {
           </div>
 
           {/* GRID */}
-          <div className="mt-12 grid gap-10 md:grid-cols-[1fr_300px]">
+          <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_320px]">
             {/* Content */}
             <div className="min-w-0">
               {/* TOC */}
@@ -230,46 +240,38 @@ export default function HealthProductPage({ slug, data, lastUpdated }) {
               {/* Sections */}
               {/* Sections — Feature Cards v2 */}
               {data.sections?.map((s, idx) => (
-                <section id={s.id} key={s.id} className="mt-14 scroll-mt-24">
-                  {/* header */}
+                <section id={s.id} key={s.id} className="mt-12 scroll-mt-24">
                   <div className="flex items-center gap-3">
                     <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 font-semibold">
                       {String(idx + 1).padStart(2, "0")}
                     </div>
-                    <div>
-                      <h2 className="text-2xl font-bold text-gray-900">
-                        {s.title}
-                      </h2>
+                    <div className="min-w-0">
+                      <h2 className="text-2xl font-bold text-gray-900 break-words">{s.title}</h2>
                       <div className="mt-1 h-1 w-16 rounded bg-emerald-500" />
                     </div>
                   </div>
 
-                  {/* body */}
                   {s.type === "text" && (
-                    <p className="mt-5 max-w-3xl leading-relaxed text-gray-700">
-                      {s.text}
-                    </p>
+                    <p className="mt-5 max-w-3xl leading-relaxed text-gray-700">{s.text}</p>
                   )}
 
-                  {s.type === "list" &&
-                    Array.isArray(s.items) &&
-                    s.items.length > 0 && (
-                      <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                        {s.items.map((item, i) => (
-                          <div
-                            key={`${s.id}-${i}`}
-                            className="group rounded-2xl border border-gray-100 bg-white p-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition"
-                          >
-                            <div className="flex items-start gap-3">
-                              <span className="mt-1 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
-                                <FaCheck />
-                              </span>
-                              <p className="text-gray-800">{item}</p>
-                            </div>
+                  {s.type === "list" && Array.isArray(s.items) && s.items.length > 0 && (
+                    <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                      {s.items.map((item, i) => (
+                        <div
+                          key={`${s.id}-${i}`}
+                          className="group rounded-2xl border border-gray-100 bg-white p-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition"
+                        >
+                          <div className="flex items-start gap-3">
+                            <span className="mt-1 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+                              <FaCheck />
+                            </span>
+                            <p className="text-gray-800 text-justify">{item}</p>
                           </div>
-                        ))}
-                      </div>
-                    )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </section>
               ))}
 
@@ -288,18 +290,18 @@ export default function HealthProductPage({ slug, data, lastUpdated }) {
                       Compare policies, check eligibility, and apply easily.
                     </p>
                   </div>
-                  <div className="flex gap-4">
+                  <div className="flex gap-3 ">
                     <Link
-                      href="/quote"
-                      className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-white font-semibold shadow hover:bg-emerald-700"
+                     href="https://insurance.digibima.com/" target="_blank"
+                      className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-white font-semibold shadow hover:bg-emerald-700 whitespace-nowrap"
                     >
-                      Get Quote <FaArrowRight />
+                      Get Quote <FaArrowRight className="shrink-0" />
                     </Link>
                     <Link
                       href="/contact"
-                      className="inline-flex items-center gap-2 rounded-xl border px-5 py-3 font-semibold text-gray-700 hover:bg-gray-50"
+                      className="inline-flex items-center gap-2 rounded-xl border px-5 py-3 font-semibold text-gray-700 hover:bg-gray-50 whitespace-nowrap"
                     >
-                      Talk to Advisor <FaQuestionCircle />
+                      Talk to Advisor <FaQuestionCircle className="shrink-0" />
                     </Link>
                   </div>
                 </div>
@@ -313,7 +315,7 @@ export default function HealthProductPage({ slug, data, lastUpdated }) {
             </div>
 
             {/* Sidebar */}
-            <aside className="md:sticky md:top-24 lg:top-28 xl:top-32 h-max z-20">
+            <aside className="hidden lg:block lg:sticky lg:top-28 xl:top-32 h-max min-w-0 z-20 mb-5 max-h-[calc(100vh-8rem)] overflow-auto">
               <div className="rounded-2xl border bg-white/80 p-6 shadow-lg backdrop-blur">
                 <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-700">
                   <FaListUl /> Quick Links
@@ -343,7 +345,7 @@ export default function HealthProductPage({ slug, data, lastUpdated }) {
 
                 <div className="mt-6 grid gap-3">
                   <Link
-                    href="/quote"
+                   href="https://insurance.digibima.com/" target="_blank"
                     className="flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-white font-semibold shadow hover:bg-emerald-700"
                   >
                     Get Quote <FaArrowRight />
@@ -366,7 +368,7 @@ export default function HealthProductPage({ slug, data, lastUpdated }) {
         {/* wrapper is non-interactive to avoid layout quirks; buttons re-enable */}
         <div className="flex gap-2 rounded-2xl border bg-white/95 p-2 shadow-lg backdrop-blur pointer-events-auto">
           <Link
-            href="/quote"
+            href="https://insurance.digibima.com/" target="_blank"
             className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-white"
           >
             Get Quote <FaArrowRight className="shrink-0" />

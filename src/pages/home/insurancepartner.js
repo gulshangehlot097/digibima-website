@@ -24,7 +24,7 @@ export default function InsurancePartners() {
   return (
     <section className="py-20 bg-white  ">
       <div className="max-w-6xl mx-auto px-6 text-center">
-        <h4 className="text-blue-800 font-semibold uppercase tracking-wide">
+        <h4 className="text-[#0c4c8d] font-semibold uppercase tracking-wide">
           Partners
         </h4>
         <h2 className="text-3xl md:text-5xl font-bold text-black-700 dark:text-black-300 mt-2">

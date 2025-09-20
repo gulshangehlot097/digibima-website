@@ -15,7 +15,7 @@ young professionals or college students just starting out.`,
         <div className="flex flex-col gap-6 py-6 sm:py-8 lg:flex-row lg:items-center lg:justify-between">
           
           {/* Text */}
-          <p className="text-slate-800 text-base sm:text-lg leading-relaxed lg:max-w-4xl">
+          <p className="text-slate-800 text-base text-justify sm:text-lg leading-relaxed lg:max-w-4xl">
             {text}
           </p>
 

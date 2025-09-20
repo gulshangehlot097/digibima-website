@@ -32,7 +32,7 @@ export default function FaqSection() {
     <section className="bg-[#C3ECFE] py-16 px-4">
      <div className="text-center mb-10 max-w-3xl mx-auto">
   <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-3">
-    Frequently Asked <span className="text-[#1D4ED8]">Questions</span>
+    Frequently Asked <span className="text-[#0c4c8d]">Questions</span>
   </h2>
   <p className="text-base md:text-lg text-gray-600">
     We are here to help you do your job so that we can help you get the most out of your time.
@@ -44,7 +44,7 @@ export default function FaqSection() {
         {/* Sidebar */}
         <div className="bg-white p-6 rounded-2xl ">
           <h2 className="text-xl font-bold text-gray-800 mb-3">Any Questions?</h2>
-         <p className="text-base text-gray-600 leading-relaxed mb-6">
+         <p className="text-base text-gray-600 text-justify leading-relaxed mb-6">
   Do you have any inquiries about your insurance policy? Whether you&apos;re looking for short-term protection, long-term security, or a balanced mix, we&apos;re here to guide you. Reach out now to explore your options!
 </p>
 
@@ -77,7 +77,7 @@ export default function FaqSection() {
         </div>
 
         {/* FAQ */}
-        <div className="md:col-span-2 space-y-4">
+        <div className="md:col-span-2 space-y-4 ">
           {faqs.map((item, i) => (
             <div
               key={i}
@@ -89,7 +89,7 @@ export default function FaqSection() {
                 className="w-full px-6 py-4 flex justify-between items-center"
               >
                 <div className="flex items-center gap-4 text-left">
-                  <div className="w-8 h-8 bg-[#7998F4] text-white font-bold text-sm flex items-center justify-center rounded-full shadow-md">
+                  <div className="w-8 h-8 bg-[#0c4c8d] text-white font-bold text-sm flex items-center justify-center rounded-full shadow-md">
                     {String(i + 1).padStart(2, "0")}
                   </div>
                   <p className="text-base text-gray-800 font-medium">
@@ -113,7 +113,7 @@ export default function FaqSection() {
       animate={{ height: "auto", opacity: 1 }}
       exit={{ height: 0, opacity: 0 }}
       transition={{ duration: 0.4, ease: "easeInOut" }}
-      className="px-6 text-base text-gray-700 overflow-hidden"
+      className="px-6 text-base text-justify text-gray-700 overflow-hidden"
     >
       <div className="pt-2 pb-4">{item.answer}</div>
     </motion.div>

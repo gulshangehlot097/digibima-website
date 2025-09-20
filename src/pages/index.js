@@ -8,7 +8,7 @@ import DigibimaCta from './home/digibimacta'
 import FaqSection from './home/faqsection'
 import OurPartner from './home/insurancepartner'
 import PerfectPlanSection from './home/contact'
-import ConnectWith from '@/pages/components/home/connectwithus'
+import ConnectWith from '@/pages/components/home/connectwithus' 
 
 
 
@@ -26,7 +26,6 @@ export default function Main() {
       {/* <ContactWithUs/> */}
       <AboutUs/>
       <WhyChooseUs/>
-      {/* <DigibimaCta/> */}
       <ConnectWith/>
       <FaqSection/>
       <OurPartner/>
