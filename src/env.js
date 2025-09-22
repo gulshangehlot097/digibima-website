@@ -17,7 +17,9 @@ const constant = {
     USER: {
       SENDOTP: "/api/sendotp",
       VERIFYOTP: "/api/verifyotp",
+       PINCODE: "/api/acpincode",
       USERINQUIRE: "/api/userpnlx/user-inquire",
+      USERLOGIN: "/api/motor/vehicle-type-select",
     },
 
     ADMIN: {
@@ -27,7 +29,8 @@ const constant = {
     },
     BLOG:"/api/adminpnlx/blogs",
     SINGLEBLOG:"/api/adminpnlx/show-blogs",
-    DELETEBLOG:"/api/adminpnlx/delete-blog"
+    DELETEBLOG:"/api/adminpnlx/delete-blog",
+    TRASHBLOG:"/api/adminpnlx/trash-blog"
   },
 };
 

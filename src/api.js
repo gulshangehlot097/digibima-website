@@ -6,7 +6,8 @@ import constant from '@/env'
 
 export async function CallApi(url, method = "POST", data = null ) {
   // console.log(data);
-  let token = localStorage.getItem("token");
+  let token = localStorage.getItem("db_auth_token");
+  console.log(token);
   let options = {
     method,
     headers: {

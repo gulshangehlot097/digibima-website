@@ -41,11 +41,41 @@ export default function App({ Component, pageProps }) {
     };
   }, [router]);
 
+
+  const { isReady, query, pathname, replace } = router;
+const logoutParam = query?.logout;
+  useEffect(() => {
+  const shouldLogout =
+    Array.isArray(logoutParam) ? logoutParam[0] === "1" : logoutParam === "1";
+
+  if (!isReady || !shouldLogout) return;
+
+  try {
+    localStorage.removeItem("db_auth_token");
+    localStorage.removeItem("db_auth_user");
+  } catch {}
+  document.cookie = "db_auth_token=; Max-Age=0; path=/; samesite=lax; secure";
+
+  // notify all tabs + same tab
+  window.dispatchEvent(new Event("auth-change"));
+  try {
+    const bc = new BroadcastChannel("auth");
+    bc.postMessage({ type: "logout", origin: "website" });
+    bc.close();
+  } catch {}
+  try {
+    localStorage.setItem("auth:logout_at", String(Date.now()));
+  } catch {}
+
+  // URL clean (query params hatao)
+  replace(pathname, undefined, { shallow: true });
+}, [isReady, logoutParam, pathname, replace]);
+
+
   if (loading || pageLoading) {
     return <PageLoader />;
   }
 
-  // 👇 check admin
   const pathNoQuery = router.asPath.split("?")[0].replace(/\/+$/, "") || "/";
   const isAdminRoot = pathNoQuery === "/admin";
 

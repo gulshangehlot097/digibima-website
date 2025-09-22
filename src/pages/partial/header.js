@@ -33,6 +33,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { logo } from "@/images/Image";
 import Image from "next/image";
 import { FaTwitter, FaFacebookF, FaLinkedinIn, FaInstagram } from "react-icons/fa";
+import { CallApi } from "@/api";
 
 const pop = {
   initial: { opacity: 0, y: -6 },
@@ -53,6 +54,55 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [openDesk, setOpenDesk] = useState(null);
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+const [accountOpen, setAccountOpen] = useState(false);
+const [userName, setUserName] = useState("My Account");
+const [loggingOut, setLoggingOut] = useState(false);
+const [authReady, setAuthReady] = useState(false);
+
+const BASE_PROFILE_URL = "https://uat.digibima.com/userpnlx/user-dashboard";
+const [profileHref, setProfileHref] = useState(BASE_PROFILE_URL);
+
+function getValidToken() {
+  if (typeof window === "undefined") return null;
+  const raw = localStorage.getItem("db_auth_token");
+  if (!raw) return null;
+  const t = String(raw).trim();
+
+  if (!t || t === "null" || t === "undefined") return null;
+  return t;
+}
+useEffect(() => {
+  const sync = () => {
+    const t = getValidToken();
+    setIsLoggedIn(!!t);
+    try {
+      const raw = localStorage.getItem("db_auth_user");
+      const u = raw ? JSON.parse(raw) : {};
+      setUserName(u?.name || "My Account");
+    } catch {
+      setUserName("My Account");
+    }
+    setAuthReady(true);
+  };
+
+  sync();
+  window.addEventListener("auth-change", sync);
+  const onStorage = (e) => {
+    if (["db_auth_token","db_auth_user","auth:logout_at","auth:login_at"].includes(e.key)) sync();
+  };
+  window.addEventListener("storage", onStorage);
+
+  let bc;
+  try { bc = new BroadcastChannel("auth"); bc.onmessage = sync; } catch {}
+
+  return () => {
+    window.removeEventListener("auth-change", sync);
+    window.removeEventListener("storage", onStorage);
+    if (bc) bc.close();
+  };
+}, []);
 
   // --- hover-intent timer ---
   const hoverTimer = useRef(null);
@@ -89,12 +139,12 @@ export default function Header() {
     };
   }, []);
 
-  // clear any pending hover timeout on unmount
+
   useEffect(() => {
     return () => clearHoverTimer();
   }, [clearHoverTimer]);
 
-  // close all menus on Escape
+
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "Escape") {
@@ -105,6 +155,148 @@ export default function Header() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
+
+
+
+  useEffect(() => {
+  const read = () => {
+    const t = typeof window !== "undefined" ? localStorage.getItem("db_auth_token") : null;
+    setIsLoggedIn(!!t);
+    try {
+      const raw = localStorage.getItem("db_auth_user");
+      const u = raw ? JSON.parse(raw) : {};
+      setUserName(u?.name || "My Account");
+    } catch {
+      setUserName("My Account");
+    }
+  };
+  read();
+  const onStorage = (e) => { if (e.key === "db_auth_token" || e.key === "db_auth_user") read(); };
+  window.addEventListener("storage", onStorage);
+  return () => window.removeEventListener("storage", onStorage);
+}, []);
+
+// logout
+const handleLogout = useCallback(async () => {
+  if (loggingOut) return;
+  setLoggingOut(true);
+  try {
+    const response = await CallApi("/api/logout", "POST", ""); 
+    if (response?.status) {
+      try {
+        localStorage.removeItem("db_auth_token");
+        localStorage.removeItem("db_auth_user");
+      } catch {}
+      document.cookie = "db_auth_token=; Max-Age=0; path=/; samesite=lax; secure";
+
+    window.dispatchEvent(new Event("auth-change"));
+try {
+  const bc = new BroadcastChannel("auth");
+  bc.postMessage({ type: "logout" });
+  bc.close();
+} catch {}
+try {
+  localStorage.setItem("auth:logout_at", String(Date.now()));
+} catch {}
+      try {
+        localStorage.setItem("auth:logout_at", String(Date.now()));
+      } catch {}
+
+      setIsLoggedIn(false);
+      setAccountOpen(false);
+    } else {
+      console.warn("Logout failed:", response);
+    }
+  } catch (err) {
+    console.error("Logout error:", err);
+  } finally {
+    setLoggingOut(false);
+  }
+}, [loggingOut, setIsLoggedIn, setAccountOpen]);
+
+
+
+useEffect(() => {
+  if (typeof window === "undefined") return;
+
+  const t = localStorage.getItem("db_auth_token");
+  const raw = localStorage.getItem("db_auth_user");
+
+  let nextHref = BASE_PROFILE_URL;
+
+  if (t && raw) {
+    try {
+      const u = JSON.parse(raw) || {};
+      const uid =
+        String(u?.id ?? u?.user_id ?? u?._id ?? u?.ID ?? "").trim();
+      const type =
+        String(u?.type ?? u?.role ?? "customer").trim();
+
+      const qs = new URLSearchParams();
+      if (uid) qs.set("user_id", uid);
+      qs.set("token", t);        
+      qs.set("type", type);
+
+      nextHref = `${BASE_PROFILE_URL}?${qs.toString()}`;
+    } catch {
+
+    }
+  }
+
+  setProfileHref(nextHref);
+}, [isLoggedIn]); 
+
+useEffect(() => {
+const syncFromStorage = () => {
+  const t = getValidToken();
+  setIsLoggedIn(!!t);
+
+  try {
+    const raw = localStorage.getItem("db_auth_user");
+    const u = raw ? JSON.parse(raw) : {};
+    setUserName(u?.name || "My Account");
+  } catch {
+    setUserName("My Account");
+  }
+};
+
+
+
+  syncFromStorage();
+
+  const onAuthChange = () => syncFromStorage();
+  window.addEventListener("auth-change", onAuthChange);
+
+  let bc;
+  try {
+    bc = new BroadcastChannel("auth");
+    bc.onmessage = (ev) => {
+      if (ev?.data?.type === "logout" || ev?.data?.type === "login") {
+        syncFromStorage();
+      }
+    };
+  } catch {}
+
+  const onStorage = (e) => {
+    if (
+      e.key === "db_auth_token" ||
+      e.key === "db_auth_user" ||
+      e.key === "auth:logout_at" ||
+      e.key === "auth:login_at"
+    ) {
+      syncFromStorage();
+    }
+  };
+  window.addEventListener("storage", onStorage);
+
+  return () => {
+    window.removeEventListener("auth-change", onAuthChange);
+    window.removeEventListener("storage", onStorage);
+    if (bc) bc.close();
+  };
+}, []);
+
+
 
   return (
     <>
@@ -436,12 +628,51 @@ export default function Header() {
                 </div>
               </div>
             </div>
-            <Link
-              href="/login"
-              className="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors"
-            >
-              Log In
-            </Link>
+           {authReady && (
+  !isLoggedIn ? (
+  <Link
+    href="/login"
+    className="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors"
+  >
+    Log In
+  </Link>
+) : (
+  <div className="relative">
+    <button
+      onClick={() => setAccountOpen((o) => !o)}
+      className="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors flex items-center gap-2"
+      aria-haspopup="menu"
+      aria-expanded={accountOpen}
+    >
+      {userName}
+      {accountOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+    </button>
+
+    <AnimatePresence>
+      {accountOpen && (
+        <motion.div
+          {...pop}
+          role="menu"
+          className="absolute right-0 mt-2 w-44 bg-white shadow-lg rounded-lg border p-2 z-[70]"
+          onMouseLeave={() => setAccountOpen(false)}
+        >
+          <Link href={profileHref} target="_blank" role="menuitem" className="block px-3 py-2 rounded hover:bg-gray-50">
+  Profile
+</Link>
+
+          <button
+            role="menuitem"
+            onClick={handleLogout}
+            className="w-full text-left px-3 py-2 rounded hover:bg-gray-50"
+          >
+            Logout
+          </button>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </div>
+))}
+
           </div>
 
           {/* Mobile Toggle */}
@@ -616,12 +847,28 @@ export default function Header() {
               Contact
             </Link>
 
-            <Link
-  href="/login"
-  className="px-4 py-2 bg-green-700 text-white rounded-full hover:bg-green-800 transition-colors"
->
-  Log In
+{authReady && (
+  !isLoggedIn ? (
+  <Link
+    href="/login"
+    className="px-4 py-2 bg-green-700 text-white rounded-full hover:bg-green-800 transition-colors"
+  >
+    Log In
+  </Link>
+) : (
+  <div className="flex items-center gap-3 pt-2">
+   <Link href={profileHref} className="px-4 py-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors">
+  Profile
 </Link>
+    <button
+      onClick={handleLogout}
+      className="px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+    >
+      Logout
+    </button>
+  </div>
+))}
+
 
           </nav>
         </div>

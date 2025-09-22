@@ -76,6 +76,57 @@ body{
   @apply w-full;
 }
 
+/* our partner crousel css start  */
+/* ===== Vanilla marquee core ===== */
+.marquee {
+  position: relative;
+  overflow: hidden;             /* no horizontal scrollbar */
+}
+.marquee__track {
+  display: flex;
+  gap: 24px;
+  will-change: transform;
+  animation: marquee-scroll var(--marquee-duration, 28s) linear infinite;
+}
+
+/* Seamless loop: we render items twice and slide by 50% width */
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Pause rules:
+   - Hover: wrapper:hover pauses via CSS
+   - Scroll/Wheel: JS toggles .is-paused on wrapper
+*/
+.carousel-mask:hover .marquee__track,
+.carousel-mask.is-paused .marquee__track {
+  animation-play-state: paused;
+}
+
+/* Edge fade overlays */
+.carousel-mask {
+  position: relative;
+  overflow: hidden;             /* ensure no scroll-x from mask/track */
+  --mask-bg: #ffffff;           /* match section background */
+}
+.carousel-mask .fade-left {
+  background: linear-gradient(to right, var(--mask-bg), rgba(255,255,255,0));
+}
+.carousel-mask .fade-right {
+  background: linear-gradient(to left, var(--mask-bg), rgba(255,255,255,0));
+}
+
+/* Respect prefers-reduced-motion (optional but nice) */
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track {
+    animation-duration: 0.001s; /* effectively stop */
+    animation-iteration-count: 1;
+    transform: translateX(0);
+  }
+}
+
+/* our partner crousel css end  */
 
 /* ck editior css */
 

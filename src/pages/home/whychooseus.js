@@ -77,7 +77,7 @@ export default function WhyChooseUsSection() {
                   : "rounded-bl-none rounded-tr-none"
               }`}
             >
-              <span className="text-white text-base sm:text-lg md:text-xl p-2">
+              <span className="text-white text-base sm:text-lg md:text-xl  p-2">
                 {icon || <FaHands />}
               </span>
             </div>
@@ -91,7 +91,7 @@ export default function WhyChooseUsSection() {
                 : "pl-10 sm:pl-12 md:pl-14"
             } text-left`}
           >
-            <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-800">
+            <h3 className="text-sm text-center sm:text-left sm:text-base md:text-lg font-semibold text-gray-800">
               {title}
             </h3>
             <p className="text-xs sm:text-sm md:text-[15px] text-gray-500">
