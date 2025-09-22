@@ -8,7 +8,7 @@ import { showSuccess, showError } from "@/layouts/toaster";
 import { useRouter } from "next/router";
 import Pagination from "../../components/blogpage/pagination";
 import Modal from "@/pages/components/modal";
-
+//console
 const PER_PAGE = 5;
 const SKELETON_COUNT = 5;
 
