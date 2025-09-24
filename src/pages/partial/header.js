@@ -56,53 +56,76 @@ export default function Header() {
   const [openDesk, setOpenDesk] = useState(null);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-const [accountOpen, setAccountOpen] = useState(false);
-const [userName, setUserName] = useState("My Account");
-const [loggingOut, setLoggingOut] = useState(false);
-const [authReady, setAuthReady] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
+  const [userName, setUserName] = useState("My Account");
+  const [loggingOut, setLoggingOut] = useState(false);
+  const [authReady, setAuthReady] = useState(false);
 
-const BASE_PROFILE_URL = "https://uat.digibima.com/userpnlx/user-dashboard";
-const [profileHref, setProfileHref] = useState(BASE_PROFILE_URL);
+  const BASE_PROFILE_URL = "https://insurance.digibima.com/userpnlx/user-dashboard";
+  const [profileHref, setProfileHref] = useState(BASE_PROFILE_URL);
 
-function getValidToken() {
-  if (typeof window === "undefined") return null;
-  const raw = localStorage.getItem("db_auth_token");
-  if (!raw) return null;
-  const t = String(raw).trim();
+  // ----------------- utils -----------------
+  function getValidToken() {
+    if (typeof window === "undefined") return null;
+    const raw = localStorage.getItem("token");
+    if (!raw) return null;
+    const t = String(raw).trim();
+    if (!t || t === "null" || t === "undefined") return null;
+    return t;
+  }
 
-  if (!t || t === "null" || t === "undefined") return null;
-  return t;
-}
-useEffect(() => {
-  const sync = () => {
-    const t = getValidToken();
-    setIsLoggedIn(!!t);
-    try {
-      const raw = localStorage.getItem("db_auth_user");
-      const u = raw ? JSON.parse(raw) : {};
-      setUserName(u?.name || "My Account");
-    } catch {
-      setUserName("My Account");
-    }
-    setAuthReady(true);
-  };
+  function buildProfileUrl(baseUrl, token, user) {
+    const uid = String(
+      user?.id ?? user?.user_id ?? user?._id ?? user?.ID ?? ""
+    ).trim();
+    const name = String(
+      user?.name ?? user?.full_name ?? user?.username ?? ""
+    ).trim();
 
-  sync();
-  window.addEventListener("auth-change", sync);
-  const onStorage = (e) => {
-    if (["db_auth_token","db_auth_user","auth:logout_at","auth:login_at"].includes(e.key)) sync();
-  };
-  window.addEventListener("storage", onStorage);
+    const qs = new URLSearchParams();
+    if (token) qs.set("token", token);
+    if (uid) qs.set("user_id", uid);
+    if (name) qs.set("user_name", name);
+    qs.set("login_type", "user");
 
-  let bc;
-  try { bc = new BroadcastChannel("auth"); bc.onmessage = sync; } catch {}
 
-  return () => {
-    window.removeEventListener("auth-change", sync);
-    window.removeEventListener("storage", onStorage);
-    if (bc) bc.close();
-  };
-}, []);
+    
+    
+
+    return `${baseUrl}?${qs.toString()}`;
+  }
+
+  // ----------------- Auth sync -----------------
+  useEffect(() => {
+    const sync = () => {
+      const t = getValidToken();
+      setIsLoggedIn(!!t);
+      try {
+        const raw = localStorage.getItem("dbuser");
+        const u = raw ? JSON.parse(raw) : {};
+        setUserName(u?.name || "My Account");
+      } catch {
+        setUserName("My Account");
+      }
+      setAuthReady(true);
+    };
+
+    sync();
+    window.addEventListener("auth-change", sync);
+    const onStorage = (e) => {
+      if (["token", "dbuser", "auth:logout_at", "auth:login_at"].includes(e.key)) sync();
+    };
+    window.addEventListener("storage", onStorage);
+
+    let bc;
+    try { bc = new BroadcastChannel("auth"); bc.onmessage = sync; } catch {}
+
+    return () => {
+      window.removeEventListener("auth-change", sync);
+      window.removeEventListener("storage", onStorage);
+      if (bc) bc.close();
+    };
+  }, []);
 
   // --- hover-intent timer ---
   const hoverTimer = useRef(null);
@@ -139,11 +162,9 @@ useEffect(() => {
     };
   }, []);
 
-
   useEffect(() => {
     return () => clearHoverTimer();
   }, [clearHoverTimer]);
-
 
   useEffect(() => {
     const onKey = (e) => {
@@ -156,146 +177,129 @@ useEffect(() => {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  useEffect(() => {
+    const read = () => {
+      const t = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      setIsLoggedIn(!!t);
+      try {
+        const raw = localStorage.getItem("dbuser");
+        const u = raw ? JSON.parse(raw) : {};
+        setUserName(u?.name || "My Account");
+      } catch {
+        setUserName("My Account");
+      }
+    };
+    read();
+    const onStorage = (e) => { if (e.key === "token" || e.key === "dbuser") read(); };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
 
+  // logout
+  const handleLogout = useCallback(async () => {
+    if (loggingOut) return;
+    setLoggingOut(true);
+    try {
+      const response = await CallApi("/api/logout", "POST", ""); 
+      if (response?.status) {
+        try {
+          localStorage.removeItem("token");
+          localStorage.removeItem("dbuser");
+        } catch {}
+        document.cookie = "token=; Max-Age=0; path=/; samesite=lax; secure";
+
+        window.dispatchEvent(new Event("auth-change"));
+        try {
+          const bc = new BroadcastChannel("auth");
+          bc.postMessage({ type: "logout" });
+          bc.close();
+        } catch {}
+        try {
+          localStorage.setItem("auth:logout_at", String(Date.now()));
+        } catch {}
+        try {
+          localStorage.setItem("auth:logout_at", String(Date.now()));
+        } catch {}
+
+        setIsLoggedIn(false);
+        setAccountOpen(false);
+      } else {
+        console.warn("Logout failed:", response);
+      }
+    } catch (err) {
+      console.error("Logout error:", err);
+    } finally {
+      setLoggingOut(false);
+    }
+  }, [loggingOut, setIsLoggedIn, setAccountOpen]);
 
   useEffect(() => {
-  const read = () => {
-    const t = typeof window !== "undefined" ? localStorage.getItem("db_auth_token") : null;
-    setIsLoggedIn(!!t);
-    try {
-      const raw = localStorage.getItem("db_auth_user");
-      const u = raw ? JSON.parse(raw) : {};
-      setUserName(u?.name || "My Account");
-    } catch {
-      setUserName("My Account");
-    }
-  };
-  read();
-  const onStorage = (e) => { if (e.key === "db_auth_token" || e.key === "db_auth_user") read(); };
-  window.addEventListener("storage", onStorage);
-  return () => window.removeEventListener("storage", onStorage);
-}, []);
+    if (typeof window === "undefined") return;
 
-// logout
-const handleLogout = useCallback(async () => {
-  if (loggingOut) return;
-  setLoggingOut(true);
-  try {
-    const response = await CallApi("/api/logout", "POST", ""); 
-    if (response?.status) {
+    const token = getValidToken();
+    const raw = localStorage.getItem("dbuser");
+
+    let nextHref = BASE_PROFILE_URL;
+
+    if (token && raw) {
       try {
-        localStorage.removeItem("db_auth_token");
-        localStorage.removeItem("db_auth_user");
-      } catch {}
-      document.cookie = "db_auth_token=; Max-Age=0; path=/; samesite=lax; secure";
+        const user = JSON.parse(raw) || {};
+        nextHref = buildProfileUrl(BASE_PROFILE_URL, token, user);
+      } catch {
+        // fallback remains base
+      }
+    }
 
-    window.dispatchEvent(new Event("auth-change"));
-try {
-  const bc = new BroadcastChannel("auth");
-  bc.postMessage({ type: "logout" });
-  bc.close();
-} catch {}
-try {
-  localStorage.setItem("auth:logout_at", String(Date.now()));
-} catch {}
+    setProfileHref(nextHref);
+  }, [isLoggedIn]);
+
+  useEffect(() => {
+    const syncFromStorage = () => {
+      const t = getValidToken();
+      setIsLoggedIn(!!t);
+
       try {
-        localStorage.setItem("auth:logout_at", String(Date.now()));
-      } catch {}
+        const raw = localStorage.getItem("dbuser");
+        const u = raw ? JSON.parse(raw) : {};
+        setUserName(u?.name || "My Account");
+      } catch {
+        setUserName("My Account");
+      }
+    };
 
-      setIsLoggedIn(false);
-      setAccountOpen(false);
-    } else {
-      console.warn("Logout failed:", response);
-    }
-  } catch (err) {
-    console.error("Logout error:", err);
-  } finally {
-    setLoggingOut(false);
-  }
-}, [loggingOut, setIsLoggedIn, setAccountOpen]);
+    syncFromStorage();
 
+    const onAuthChange = () => syncFromStorage();
+    window.addEventListener("auth-change", onAuthChange);
 
-
-useEffect(() => {
-  if (typeof window === "undefined") return;
-
-  const t = localStorage.getItem("db_auth_token");
-  const raw = localStorage.getItem("db_auth_user");
-
-  let nextHref = BASE_PROFILE_URL;
-
-  if (t && raw) {
+    let bc;
     try {
-      const u = JSON.parse(raw) || {};
-      const uid =
-        String(u?.id ?? u?.user_id ?? u?._id ?? u?.ID ?? "").trim();
-      const type =
-        String(u?.type ?? u?.role ?? "customer").trim();
+      bc = new BroadcastChannel("auth");
+      bc.onmessage = (ev) => {
+        if (ev?.data?.type === "logout" || ev?.data?.type === "login") {
+          syncFromStorage();
+        }
+      };
+    } catch {}
 
-      const qs = new URLSearchParams();
-      if (uid) qs.set("user_id", uid);
-      qs.set("token", t);        
-      qs.set("type", type);
-
-      nextHref = `${BASE_PROFILE_URL}?${qs.toString()}`;
-    } catch {
-
-    }
-  }
-
-  setProfileHref(nextHref);
-}, [isLoggedIn]); 
-
-useEffect(() => {
-const syncFromStorage = () => {
-  const t = getValidToken();
-  setIsLoggedIn(!!t);
-
-  try {
-    const raw = localStorage.getItem("db_auth_user");
-    const u = raw ? JSON.parse(raw) : {};
-    setUserName(u?.name || "My Account");
-  } catch {
-    setUserName("My Account");
-  }
-};
-
-
-
-  syncFromStorage();
-
-  const onAuthChange = () => syncFromStorage();
-  window.addEventListener("auth-change", onAuthChange);
-
-  let bc;
-  try {
-    bc = new BroadcastChannel("auth");
-    bc.onmessage = (ev) => {
-      if (ev?.data?.type === "logout" || ev?.data?.type === "login") {
+    const onStorage = (e) => {
+      if (
+        e.key === "token" ||
+        e.key === "dbuser" ||
+        e.key === "auth:logout_at" ||
+        e.key === "auth:login_at"
+      ) {
         syncFromStorage();
       }
     };
-  } catch {}
+    window.addEventListener("storage", onStorage);
 
-  const onStorage = (e) => {
-    if (
-      e.key === "db_auth_token" ||
-      e.key === "db_auth_user" ||
-      e.key === "auth:logout_at" ||
-      e.key === "auth:login_at"
-    ) {
-      syncFromStorage();
-    }
-  };
-  window.addEventListener("storage", onStorage);
-
-  return () => {
-    window.removeEventListener("auth-change", onAuthChange);
-    window.removeEventListener("storage", onStorage);
-    if (bc) bc.close();
-  };
-}, []);
-
+    return () => {
+      window.removeEventListener("auth-change", onAuthChange);
+      window.removeEventListener("storage", onStorage);
+      if (bc) bc.close();
+    };
+  }, []);
 
 
   return (

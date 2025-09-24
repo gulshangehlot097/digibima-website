@@ -11,11 +11,11 @@ const nextConfig = {
   productionBrowserSourceMaps: false,
 
   images: {
-    domains: ["stage.digibima.com", "digibima.com", "cdn.digibima.com"],
+    domains: ["api.digibima.com", "digibima.com", "cdn.digibima.com"],
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "stage.digibima.com",
+        hostname: "api.digibima.com",
         pathname: "/**",
       },
     ],
@@ -25,7 +25,7 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "https://stage.digibima.com/api/:path*",
+        destination: "https://api.digibima.com/api/:path*",
       },
     ];
   },

@@ -210,7 +210,7 @@ export default function Footer() {
 
                     ISNP Licence No.:{" "}
                     <strong className="text-green-200">
-                      ISNP-IRDAI/ISNP/WA/09/2025
+                      IRDAI/ISNP/WA/09/2025
                     </strong>{" "}
                     <br />
 

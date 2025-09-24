@@ -209,10 +209,10 @@ function CustomerLogin() {
 
   const prefillFromStorage = useCallback(() => {
     try {
-      const t = localStorage.getItem("db_auth_token");
+      const t = localStorage.getItem("token");
       if (!t) return;
 
-      const raw = localStorage.getItem("db_auth_user");
+      const raw = localStorage.getItem("dbuser");
       if (!raw) return;
 
       const u = JSON.parse(raw) || {};
@@ -226,12 +226,11 @@ function CustomerLogin() {
     } catch {}
   }, []);
 
-  
   useEffect(() => {
     prefillFromStorage();
 
     const onAuthChange = () => {
-      const t = localStorage.getItem("db_auth_token");
+      const t = localStorage.getItem("token");
       if (t) prefillFromStorage();
       else resetForm();
     };
@@ -248,11 +247,11 @@ function CustomerLogin() {
 
     const onStorage = (e) => {
       if (
-        e.key === "db_auth_token" ||
+        e.key === "token" ||
         e.key === "auth:logout_at" ||
         e.key === "auth:login_at"
       ) {
-        const t = localStorage.getItem("db_auth_token");
+        const t = localStorage.getItem("token");
         if (!t || e.key === "auth:logout_at") resetForm();
         else prefillFromStorage();
       }
@@ -270,102 +269,113 @@ function CustomerLogin() {
     prefillFromStorage();
   }, [prefillFromStorage]);
 
-  const REMOTE_BASE = "https://uat.digibima.com/";
-  function buildRemoteUrl(token, user, type = "home") {
+  const REMOTE_BASE = constant.SOFTWARE_URL;
+  function buildRemoteUrl(token, user, type = "home", loginType = "user") {
     const uid = String(
       user?.id ?? user?.user_id ?? user?._id ?? user?.ID ?? ""
     ).trim();
 
+    const name = String(user?.name ?? user?.full_name ?? user?.username ?? "")
+      .trim()
+      .slice(0, 80);
+
     const qs = new URLSearchParams();
+
     if (uid) qs.set("user_id", uid);
     if (token) qs.set("token", token);
-    if (type) qs.set("type", type);
 
+    if (type) qs.set("type", type);
+    if (loginType) qs.set("login_type", loginType);
+
+    if (name) qs.set("user_name", name);
+
+    qs.set("_ts", String(Date.now()));
     return `${REMOTE_BASE}?${qs.toString()}`;
   }
 
   // --- Final Submit ---
-  const handleSubmit = useCallback(async () => {
-    if (formLocked) return;
-    if (!otpVerified) {
-      showError("Please verify OTP.");
-      return;
+const handleSubmit = useCallback(async () => {
+  if (formLocked) return;
+  if (!otpVerified) {
+    showError("Please verify OTP.");
+    return;
+  }
+
+  const isEmpty = (v) => String(v ?? "").trim() === "";
+
+  if (isEmpty(gender)) {
+    showError("Please select Gender");
+    return;
+  }
+  if (isEmpty(name)) {
+    showError("Please enter Full Name");
+    return;
+  }
+  if (isEmpty(email)) {
+    showError("Please enter Email");
+    return;
+  }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  if (!emailRegex.test(String(email).trim())) {
+    showError("Please enter a valid Email address");
+    return;
+  }
+  if (isEmpty(mobile)) {
+    showError("Please enter Mobile Number");
+    return;
+  }
+  if (isEmpty(pincode)) {
+    showError("Please enter Pincode");
+    return;
+  }
+
+  try {
+    const payload = { gender, name, email, mobile, pincode };
+    const res = await CallApi(constant.API.USER.USERLOGIN, "POST", payload);
+
+    if (res?.status) {
+      const { token, user } = res;
+
+      try {
+        localStorage.setItem("token", token);
+        localStorage.setItem("userid", user.id);
+        localStorage.setItem("dbuser", JSON.stringify(user || {}));
+      } catch {}
+
+      document.cookie = `token=${encodeURIComponent(
+        token
+      )}; path=/; max-age=${60 * 60 * 24 * 30}; samesite=lax; secure`;
+
+      try {
+        window.dispatchEvent(new Event("auth-change"));
+        const bc = new BroadcastChannel("auth");
+        bc.postMessage({ type: "login" });
+        bc.close();
+      } catch {}
+      try {
+        localStorage.setItem("auth:login_at", String(Date.now()));
+      } catch {}
+
+      showSuccess(res?.message || "Login successful");
+
+      // ✅ Define locally
+      const buildRemoteUrl = (token, user, redirectType, loginType) => {
+        // keep your existing logic here
+        return `/redirect?token=${token}&id=${user.id}&to=${redirectType}&type=${loginType}`;
+      };
+
+      const redirectType = "home";
+      const loginType = "user";
+      const targetUrl = buildRemoteUrl(token, user, redirectType, loginType);
+
+      window.location.replace(targetUrl);
     }
-    // if (!isCaptchaValid) {
-    //   showError("Invalid captcha.");
-    //   return;
-    // }
+  } catch (err) {
+    showError(err?.message || "Something went wrong");
+  }
+}, [formLocked, otpVerified, gender, name, email, mobile, pincode]);
 
-    const isEmpty = (v) => String(v ?? "").trim() === "";
 
-    if (isEmpty(gender)) {
-      showError("Please select Gender");
-      return;
-    }
-    if (isEmpty(name)) {
-      showError("Please enter Full Name");
-      return;
-    }
-    if (isEmpty(email)) {
-      showError("Please enter Email");
-      return;
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-    if (!emailRegex.test(String(email).trim())) {
-      showError("Please enter a valid Email address");
-      return;
-    }
-    if (isEmpty(mobile)) {
-      showError("Please enter Mobile Number");
-      return;
-    }
-    if (isEmpty(pincode)) {
-      showError("Please enter Pincode");
-      return;
-    }
-    // if (isEmpty(captchaInput)) {
-    //   showError("Please enter Captcha");
-    //   return;
-    // }
-
-    try {
-      const payload = { gender, name, email, mobile, pincode };
-      const res = await CallApi(constant.API.USER.USERLOGIN, "POST", payload);
-      console.log(res);
-
-      if (res?.status) {
-        const { token, user } = res;
-
-        try {
-          localStorage.setItem("db_auth_token", token);
-          localStorage.setItem("db_auth_user", JSON.stringify(user || {}));
-        } catch {}
-
-        document.cookie = `db_auth_token=${encodeURIComponent(
-          token
-        )}; path=/; max-age=${60 * 60 * 24 * 30}; samesite=lax; secure`;
-
-        try {
-          window.dispatchEvent(new Event("auth-change"));
-          const bc = new BroadcastChannel("auth");
-          bc.postMessage({ type: "login" });
-          bc.close();
-        } catch {}
-        try {
-          localStorage.setItem("auth:login_at", String(Date.now()));
-        } catch {}
-
-        showSuccess(res?.message || "Login successful");
-
-        const redirectType = "home";
-        const targetUrl = buildRemoteUrl(token, user, redirectType);
-        window.location.replace(targetUrl);
-        return;
-      }
-    } catch (err) {
-      showError(err?.message || "Something went wrong");
-    }
-  }, [formLocked, otpVerified, gender, name, email, mobile, pincode]);
 
   // --- pincode helpers ---
   useEffect(() => {
@@ -546,7 +556,7 @@ function CustomerLogin() {
                             checked={gender === opt}
                             onChange={(e) => {
                               const val = e.target.value;
-                              setGender(val); // local state only
+                              setGender(val); 
                             }}
                             className="peer sr-only"
                             disabled={formLocked}
@@ -643,7 +653,6 @@ function CustomerLogin() {
                         </button>
                       )
                     ) : (
-                      
                       <div className="w-full relative">
                         <label className="labelcls">Pincode</label>
                         <input

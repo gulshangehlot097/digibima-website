@@ -11,7 +11,9 @@ const constant = {
     // add more routes here
   },
 
-   BASE_URL: "https://stage.digibima.com/public",
+   BASE_URL: "https://api.digibima.com/public",
+
+   SOFTWARE_URL: "https://insurance.digibima.com/",
 
   API: {
     USER: {

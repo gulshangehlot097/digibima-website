@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { TypeAnimation } from "react-type-animation";
 import { motion } from "framer-motion";
+import constant from "@/env";
 
 export default function QuoteHero() {
   return (
@@ -88,55 +89,55 @@ export default function QuoteHero() {
   <Tile
     label="Health"
     sub="Cashless hospitals, pre & post hospitalization"
-    imageSrc="/images/homepage/health.png"
+    imageSrc="/images/homepage/heart.png"
     highlight
-    typeKey="health"          // 👈 yahan se type bhejna hai
+    typeKey="health"         
   />
 
   <Tile
     label="Term Life"
     sub="High cover, low premium, tax benefits*"
     imageSrc="/images/homepage/health.png"
-    link="https://insurance.digibima.com/"  // as-is
+     typeKey="health"// as-is
   />
 
   <Tile
     label="2 Wheeler"
     sub="Instant renewal, zero paperwork"
     imageSrc="/images/homepage/bike.png"
-    typeKey="motor:2 wheeler" // 👈 exact type text
+    typeKey="motor:2 wheeler"
   />
 
   <Tile
     label="4 Wheeler"
     sub="Comprehensive, third-party & add-ons"
     imageSrc="/images/homepage/car.png"
-    typeKey="motor:4 wheeler" // 👈 exact type text
+    typeKey="motor:4 wheeler"
   />
 
   <Tile
     label="Travel"
     sub="Medical cover, baggage, trip delays"
     imageSrc="/images/homepage/commercial.png"
-    link="https://insurance.digibima.com/"  // as-is
+     typeKey="motor:4 wheeler" 
   />
 
   <Tile
     label="Other"
     sub="Home, personal accident & more"
     imageSrc="/images/health/health-two.png"
-    link="https://insurance.digibima.com/"  // as-is
+    typeKey="health"
   />
 </ul>
 
 
-             <div className="mt-6 flex flex-wrap gap-3 justify-center">
+             {/* <div className="mt-6 flex flex-wrap gap-3 justify-center">
               <button className="btn-secondary">
                 Or, see all 30+ products
               </button>
               <button className="btn-ghost">Continue previous quote</button>
-              {/* <button className="btn-ghost">Find an agent</button> */}
-            </div>
+              
+            </div> */}
           </div>
         </div>
       </div>
@@ -163,32 +164,36 @@ function Tile({ label, sub, badge, imageSrc, highlight = false, link = "#", type
       ? "bg-violet-100 text-violet-700"
       : "bg-gray-100 text-gray-700";
 
-  // 👇 custom navigate sirf tab chalega jab typeKey mila ho
   const handleNavigate = (e) => {
     e.preventDefault();
-    const BASE = "https://uat.digibima.com/";
+    const BASE = constant.SOFTWARE_URL; 
 
     let token = "";
     let userId = "";
+    let userName = "";
 
     try {
-      // aapke app me token yahi keys pe store ho rahe the
-      token = localStorage.getItem("token") || localStorage.getItem("db_auth_token") || "";
-      const raw = localStorage.getItem("db_auth_user");
+      token = localStorage.getItem("token") || "";
+      const raw =  localStorage.getItem("dbuser");
       if (raw) {
         const u = JSON.parse(raw);
-        userId = u?.id || u?.user_id || u?.userid || "";
+        userId = String(u?.id ?? u?.user_id ?? u?.userid ?? "").trim();
+        userName = String(u?.name ?? u?.full_name ?? u?.username ?? "").trim();
       }
-    } catch {}
+    } catch (err) {
+      console.warn("Error reading localStorage:", err);
+    }
 
     const qs = new URLSearchParams();
     if (token) qs.set("token", token);
     if (userId) qs.set("user_id", userId);
+    if (userName) qs.set("user_name", userName);
+    qs.set("login_type", "user");
     if (typeKey) qs.set("type", typeKey);
 
-    const url = qs.toString() ? `${BASE}?${qs.toString()}` : BASE;
+    const url = `${BASE}?${qs.toString()}`;
 
-    // pehle target="_blank" tha, isliye new tab me hi:
+
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
@@ -205,7 +210,7 @@ function Tile({ label, sub, badge, imageSrc, highlight = false, link = "#", type
         </span>
       )}
 
-      <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3 cursor-pointer text-center sm:text-left">
+      <div className="flex flex-col items-center gap-3 cursor-pointer text-center">
         <div className="flex h-12 w-12 items-center justify-center">
           <Image src={imageSrc} alt={label} width={48} height={48} className="h-12 w-12 object-contain" />
         </div>
@@ -222,18 +227,16 @@ function Tile({ label, sub, badge, imageSrc, highlight = false, link = "#", type
   return (
     <li
       className={[
-        "group relative rounded-xl border bg-white p-4 sm:p-5 shadow-sm transition",
+        "group relative rounded-xl border bg-white p-3 sm:p-4 shadow-sm transition",
         "hover:shadow-md hover:border-gray-300",
         highlight ? "ring-1 ring-sky-100" : "",
       ].join(" ")}
     >
       {typeKey ? (
-        // 👉 custom redirect mode
         <a href="#" onClick={handleNavigate} className="block focus:outline-none" role="link">
           {CardInner}
         </a>
       ) : (
-        // 👉 normal external link fallback
         <Link href={link} target="_blank" className="block focus:outline-none">
           {CardInner}
         </Link>
