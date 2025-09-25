@@ -234,25 +234,26 @@ export default function Header() {
     }
   }, [loggingOut, setIsLoggedIn, setAccountOpen]);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+useEffect(() => {
+  if (typeof window === "undefined") return;
 
-    const token = getValidToken();
-    const raw = localStorage.getItem("dbuser");
+  const token = getValidToken();
+  const raw = localStorage.getItem("dbuser");
 
-    let nextHref = BASE_PROFILE_URL;
+  let nextHref = BASE_PROFILE_URL;
 
-    if (token && raw) {
-      try {
-        const user = JSON.parse(raw) || {};
-        nextHref = buildProfileUrl(BASE_PROFILE_URL, token, user);
-      } catch {
-        // fallback remains base
-      }
+  if (token && raw) {
+    try {
+      const user = JSON.parse(raw) || {};
+      nextHref = buildProfileUrl(BASE_PROFILE_URL, token, user);
+    } catch {
+      // fallback remains base
     }
+  }
 
-    setProfileHref(nextHref);
-  }, [isLoggedIn]);
+  setProfileHref(nextHref);
+}, [isLoggedIn, BASE_PROFILE_URL]);
+
 
   useEffect(() => {
     const syncFromStorage = () => {

@@ -295,6 +295,8 @@ function CustomerLogin() {
   }
 
   // --- Final Submit ---
+
+
 const handleSubmit = useCallback(async () => {
   if (formLocked) return;
   if (!otpVerified) {
@@ -304,31 +306,17 @@ const handleSubmit = useCallback(async () => {
 
   const isEmpty = (v) => String(v ?? "").trim() === "";
 
-  if (isEmpty(gender)) {
-    showError("Please select Gender");
-    return;
-  }
-  if (isEmpty(name)) {
-    showError("Please enter Full Name");
-    return;
-  }
-  if (isEmpty(email)) {
-    showError("Please enter Email");
-    return;
-  }
+  if (isEmpty(gender))  return showError("Please select Gender");
+  if (isEmpty(name))    return showError("Please enter Full Name");
+  if (isEmpty(email))   return showError("Please enter Email");
+
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   if (!emailRegex.test(String(email).trim())) {
     showError("Please enter a valid Email address");
     return;
   }
-  if (isEmpty(mobile)) {
-    showError("Please enter Mobile Number");
-    return;
-  }
-  if (isEmpty(pincode)) {
-    showError("Please enter Pincode");
-    return;
-  }
+  if (isEmpty(mobile))  return showError("Please enter Mobile Number");
+  if (isEmpty(pincode)) return showError("Please enter Pincode");
 
   try {
     const payload = { gender, name, email, mobile, pincode };
@@ -343,9 +331,11 @@ const handleSubmit = useCallback(async () => {
         localStorage.setItem("dbuser", JSON.stringify(user || {}));
       } catch {}
 
-      document.cookie = `token=${encodeURIComponent(
-        token
-      )}; path=/; max-age=${60 * 60 * 24 * 30}; samesite=lax; secure`;
+      // secure flag ko dev/prod ke hisab se set karo
+      const isHttps = typeof window !== "undefined" && window.location.protocol === "https:";
+      document.cookie =
+        `token=${encodeURIComponent(token)}; Path=/; Max-Age=${60 * 60 * 24 * 30}; SameSite=Lax` +
+        (isHttps ? `; Secure` : ``);
 
       try {
         window.dispatchEvent(new Event("auth-change"));
@@ -358,16 +348,13 @@ const handleSubmit = useCallback(async () => {
       } catch {}
 
       showSuccess(res?.message || "Login successful");
-
-    //  const targetUrl = buildRemoteUrl(token, user, "home", "user");
-      // window.location.assign(targetUrl); 
-
-       router.push(`/`);
+      router.push(`/`);
     }
   } catch (err) {
     showError(err?.message || "Something went wrong");
   }
-}, [formLocked, otpVerified, gender, name, email, mobile, pincode]);
+  // ✅ add router here
+}, [formLocked, otpVerified, gender, name, email, mobile, pincode, router]);
 
 
 
