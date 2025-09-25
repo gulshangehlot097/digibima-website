@@ -5,8 +5,11 @@ import Link from "next/link";
 import { TypeAnimation } from "react-type-animation";
 import { motion } from "framer-motion";
 import constant from "@/env";
+import { showSuccess, showError } from "@/layouts/toaster";
+import { useRouter } from "next/router";
 
 export default function QuoteHero() {
+  
   return (
     <section className="relative overflow-hidden bgcolor pt-20">
       <div className="pointer-events-none absolute inset-y-0 left-0 z-0 w-full ">
@@ -155,6 +158,7 @@ export default function QuoteHero() {
 }
 
 function Tile({ label, sub, badge, imageSrc, highlight = false, link = "#", typeKey }) {
+   const router = useRouter();
   const tone =
     badge?.tone === "sky"
       ? "bg-sky-100 text-sky-700"
@@ -164,38 +168,49 @@ function Tile({ label, sub, badge, imageSrc, highlight = false, link = "#", type
       ? "bg-violet-100 text-violet-700"
       : "bg-gray-100 text-gray-700";
 
-  const handleNavigate = (e) => {
-    e.preventDefault();
-    const BASE = constant.SOFTWARE_URL; 
+const handleNavigate = (e) => {
+  e.preventDefault();
+  const BASE = constant.SOFTWARE_URL; 
 
-    let token = "";
-    let userId = "";
-    let userName = "";
+  let token = "";
+  let userId = "";
+  let userName = "";
 
-    try {
-      token = localStorage.getItem("token") || "";
-      const raw =  localStorage.getItem("dbuser");
-      if (raw) {
-        const u = JSON.parse(raw);
-        userId = String(u?.id ?? u?.user_id ?? u?.userid ?? "").trim();
-        userName = String(u?.name ?? u?.full_name ?? u?.username ?? "").trim();
-      }
-    } catch (err) {
-      console.warn("Error reading localStorage:", err);
+  try {
+    token = localStorage.getItem("token") || "";
+    const raw = localStorage.getItem("dbuser");
+    if (raw) {
+      const u = JSON.parse(raw);
+      userId = String(u?.id ?? u?.user_id ?? u?.userid ?? "").trim();
+      userName = String(u?.name ?? u?.full_name ?? u?.username ?? "").trim();
     }
+  } catch (err) {
+    console.warn("Error reading localStorage:", err);
+  }
 
-    const qs = new URLSearchParams();
-    if (token) qs.set("token", token);
-    if (userId) qs.set("user_id", userId);
-    if (userName) qs.set("user_name", userName);
-    qs.set("login_type", "user");
-    if (typeKey) qs.set("type", typeKey);
+  if (!token) {
+   
+     setTimeout(() => {
+    
+        router.push(`/login`);
+           showError("Please login first");
+      }, 200);
+    return;
+  }
 
-    const url = `${BASE}?${qs.toString()}`;
+  const qs = new URLSearchParams();
+  qs.set("token", token);
+  if (userId) qs.set("user_id", userId);
+  if (userName) qs.set("user_name", userName);
+  qs.set("login_type", "user");
+  if (typeKey) qs.set("type", typeKey);
 
+  const url = `${BASE}?${qs.toString()}`;
 
-    window.open(url, "_blank", "noopener,noreferrer");
-  };
+  // same tab navigation
+  window.location.assign(url); // or: window.open(url, "_self");
+};
+
 
   const CardInner = (
     <>
@@ -237,7 +252,7 @@ function Tile({ label, sub, badge, imageSrc, highlight = false, link = "#", type
           {CardInner}
         </a>
       ) : (
-        <Link href={link} target="_blank" className="block focus:outline-none">
+        <Link href={link}  className="block focus:outline-none">
           {CardInner}
         </Link>
       )}

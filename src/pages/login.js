@@ -95,12 +95,13 @@ function CustomerLogin() {
   const [otpVerified, setOtpVerified] = useState(false);
   const [formLocked, setFormLocked] = useState(false);
 
-  const [cities, setCities] = useState([]); // suggestions list (array)
-  const [pinError, setPinError] = useState(""); // error message
+  const [cities, setCities] = useState([]); 
+  const [pinError, setPinError] = useState(""); 
   const suggestionsRootRef = useRef(null);
 
   const [resendTimer, setResendTimer] = useState(30);
   const [canResend, setCanResend] = useState(true);
+   const router = useRouter();
 
   // --- Captcha (commented as requested) ---
   // const generateCaptcha = useCallback(() => {
@@ -290,7 +291,7 @@ function CustomerLogin() {
     if (name) qs.set("user_name", name);
 
     qs.set("_ts", String(Date.now()));
-    return `${REMOTE_BASE}?${qs.toString()}`;
+   return `${constant.SOFTWARE_URL}/?${qs.toString()}`;
   }
 
   // --- Final Submit ---
@@ -358,17 +359,10 @@ const handleSubmit = useCallback(async () => {
 
       showSuccess(res?.message || "Login successful");
 
-      // ✅ Define locally
-      const buildRemoteUrl = (token, user, redirectType, loginType) => {
-        // keep your existing logic here
-        return `/redirect?token=${token}&id=${user.id}&to=${redirectType}&type=${loginType}`;
-      };
+    //  const targetUrl = buildRemoteUrl(token, user, "home", "user");
+      // window.location.assign(targetUrl); 
 
-      const redirectType = "home";
-      const loginType = "user";
-      const targetUrl = buildRemoteUrl(token, user, redirectType, loginType);
-
-      window.location.replace(targetUrl);
+       router.push(`/`);
     }
   } catch (err) {
     showError(err?.message || "Something went wrong");

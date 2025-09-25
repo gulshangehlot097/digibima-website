@@ -34,6 +34,7 @@ import { logo } from "@/images/Image";
 import Image from "next/image";
 import { FaTwitter, FaFacebookF, FaLinkedinIn, FaInstagram } from "react-icons/fa";
 import { CallApi } from "@/api";
+import constant from "@/env";
 
 const pop = {
   initial: { opacity: 0, y: -6 },
@@ -61,7 +62,7 @@ export default function Header() {
   const [loggingOut, setLoggingOut] = useState(false);
   const [authReady, setAuthReady] = useState(false);
 
-  const BASE_PROFILE_URL = "https://insurance.digibima.com/userpnlx/user-dashboard";
+ const BASE_PROFILE_URL = `${constant.SOFTWARE_URL}/userpnlx/user-dashboard`;
   const [profileHref, setProfileHref] = useState(BASE_PROFILE_URL);
 
   // ----------------- utils -----------------
@@ -660,7 +661,7 @@ export default function Header() {
           className="absolute right-0 mt-2 w-44 bg-white shadow-lg rounded-lg border p-2 z-[70]"
           onMouseLeave={() => setAccountOpen(false)}
         >
-          <Link href={profileHref} target="_blank" role="menuitem" className="block px-3 py-2 rounded hover:bg-gray-50">
+          <Link href={profileHref}  role="menuitem" className="block px-3 py-2 rounded hover:bg-gray-50">
   Profile
 </Link>
 

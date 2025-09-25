@@ -2,6 +2,9 @@ import Link from "next/link";
 import Seo from "@/pages/components/seo";
 import FaqSection from "@/pages/components/life-askedquestion/index";
 import { LIFE_PRODUCTS } from "@/data/lifeproducts";
+import { showError } from "@/layouts/toaster";
+import constant from "@/env";
+import { useRouter } from "next/router";
 import Image from "next/image";
 import {
   FaCheck,
@@ -37,7 +40,7 @@ export default function LifeProductPage({ slug, data, lastUpdated }) {
     month: "short",
     day: "numeric",
   });
-
+ const router = useRouter();
   const breadcrumbLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -63,6 +66,47 @@ export default function LifeProductPage({ slug, data, lastUpdated }) {
         })),
       }
     : null;
+
+      const handleQuoteClick = (e) => {
+  const BASE = constant.SOFTWARE_URL; 
+
+  let token = "";
+  let userId = "";
+  let userName = "";
+  let  typeKey="health"   
+
+  try {
+    token = localStorage.getItem("token") || "";
+    const raw = localStorage.getItem("dbuser");
+    if (raw) {
+      const u = JSON.parse(raw);
+      userId = String(u?.id ?? u?.user_id ?? u?.userid ?? "").trim();
+      userName = String(u?.name ?? u?.full_name ?? u?.username ?? "").trim();
+    }
+  } catch (err) {
+    console.warn("Error reading localStorage:", err);
+  }
+
+  if (!token) {
+   
+     setTimeout(() => {
+        router.push(`/login`);
+         showError("Please login first");
+      }, 200);
+    return;
+  }
+
+  const qs = new URLSearchParams();
+  qs.set("token", token);
+  if (userId) qs.set("user_id", userId);
+  if (userName) qs.set("user_name", userName);
+  qs.set("login_type", "user");
+  if (typeKey) qs.set("type", typeKey);
+
+  const url = `${BASE}?${qs.toString()}`;
+
+  window.location.assign(url); 
+  };
 
   return (
     <>
@@ -129,11 +173,14 @@ export default function LifeProductPage({ slug, data, lastUpdated }) {
               {/* CTA */}
               <div className="flex flex-wrap gap-4 pt-2">
                 <Link
-                  href="https://insurance.digibima.com/" target="_blank"
-                  className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 text-white font-semibold shadow-lg hover:bg-emerald-700 transition-transform hover:scale-105"
-                >
-                  Get Instant Quote <FaArrowRight />
-                </Link>
+  href="#"
+  onClick={handleQuoteClick}
+  prefetch={false}
+  className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 text-white font-semibold shadow-lg hover:bg-emerald-700 transition-transform hover:scale-105"
+>
+  Get Instant Quote <FaArrowRight />
+</Link>
+
                 <Link
                   href="/contact"
                   className="inline-flex items-center gap-2 rounded-xl border px-6 py-3 font-semibold text-gray-700 hover:bg-gray-50 hover:shadow transition-transform hover:scale-105"
@@ -287,11 +334,14 @@ export default function LifeProductPage({ slug, data, lastUpdated }) {
                   </div>
                   <div className="flex gap-4">
                     <Link
-                     href="https://insurance.digibima.com/" target="_blank"
-                      className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-white font-semibold shadow hover:bg-emerald-700"
-                    >
-                      Get Quote <FaArrowRight />
-                    </Link>
+  href="#"
+  onClick={handleQuoteClick}
+  prefetch={false}
+  className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-white font-semibold shadow hover:bg-emerald-700"
+>
+  Get Quote <FaArrowRight />
+</Link>
+
                     <Link
                       href="/contact"
                       className="inline-flex items-center gap-2 rounded-xl border px-5 py-3 font-semibold text-gray-700 hover:bg-gray-50"
@@ -339,12 +389,15 @@ export default function LifeProductPage({ slug, data, lastUpdated }) {
                 </ul>
 
                 <div className="mt-6 grid gap-3">
-                  <Link
-                   href="https://insurance.digibima.com/" target="_blank"
-                    className="flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-white font-semibold shadow hover:bg-emerald-700"
-                  >
-                    Get Quote <FaArrowRight />
-                  </Link>
+                 <Link
+  href="#"
+  onClick={handleQuoteClick}
+  prefetch={false}
+  className="flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-white font-semibold shadow hover:bg-emerald-700"
+>
+  Get Quote <FaArrowRight />
+</Link>
+
                   <Link
                     href="/contact"
                     className="flex items-center justify-center gap-2 rounded-xl border px-4 py-3 font-semibold text-gray-700 hover:bg-gray-50"
@@ -362,11 +415,14 @@ export default function LifeProductPage({ slug, data, lastUpdated }) {
       <div className="fixed inset-x-4 bottom-4 z-40 md:hidden pointer-events-none">
         <div className="flex gap-2 rounded-2xl border bg-white/95 p-2 shadow-lg backdrop-blur pointer-events-auto">
           <Link
-            href="https://insurance.digibima.com/" target="_blank"
-            className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-white"
-          >
-            Get Quote <FaArrowRight />
-          </Link>
+  href="#"
+  onClick={handleQuoteClick}
+  prefetch={false}
+  className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-white"
+>
+  Get Quote <FaArrowRight />
+</Link>
+
           <Link
             href="/contact"
             className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl border px-4 py-3 text-gray-700"
